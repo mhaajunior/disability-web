@@ -212,7 +212,7 @@ const AddHousehold = () => {
           <Card error>
             <div>
               <BiErrorCircle className="mr-2 inline-block text-xl pb-1" />
-              กรุณากรอกข้อมูลให้ครบ
+              กรุณากรอกข้อมูลให้ครบทุกช่อง
             </div>
           </Card>
         )}

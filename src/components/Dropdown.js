@@ -36,7 +36,7 @@ const Dropdown = ({ label, options, name, validate }) => {
 
   const handleOptionClick = (option, name) => {
     setIsOpen(false);
-    $("#dropdown_group").removeClass("error");
+    $(`#dropdown_group_${name}`).removeClass("error");
     setSelected(option.name);
     dispatch(changeHousehold({ name, value: option.id }));
   };
@@ -51,7 +51,9 @@ const Dropdown = ({ label, options, name, validate }) => {
         return (
           <div
             key={option.name}
-            className="cursor-pointer p-1"
+            className={`cursor-pointer p-1 ${
+              household[name] === option.id && "selected"
+            }`}
             value={option.id}
             onClick={() => handleOptionClick(option, name)}
           >
@@ -95,8 +97,8 @@ const Dropdown = ({ label, options, name, validate }) => {
 
   return (
     <div
-      id="dropdown_group"
-      className={`flex justify-between p-5 items-center ${
+      id={`dropdown_group_${name}`}
+      className={`flex justify-between p-5 items-center dropdown-group ${
         validate !== undefined && !validate && "error"
       }`}
     >
