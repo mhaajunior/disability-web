@@ -28,26 +28,7 @@ import {
 import { useState } from "react";
 
 const AddHousehold = () => {
-  const [passValidate, setPassValidate] = useState([
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ]);
+  const [passValidate, setPassValidate] = useState([]);
   const household = useSelector((state) => {
     return state.householdForm;
   });
@@ -226,7 +207,7 @@ const AddHousehold = () => {
           กลับ
         </Button>
       </Header>
-      {passValidate.every((element) => element !== null) &&
+      {passValidate.length !== 0 &&
         !passValidate.every((element) => element === true) && (
           <Card error>
             <div>

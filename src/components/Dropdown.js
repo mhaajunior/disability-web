@@ -97,7 +97,7 @@ const Dropdown = ({ label, options, name, validate }) => {
     <div
       id="dropdown_group"
       className={`flex justify-between p-5 items-center ${
-        validate !== null && !validate && "error"
+        validate !== undefined && !validate && "error"
       }`}
     >
       <label className="pr-7 font-bold w-24 label">{name.toUpperCase()}</label>
