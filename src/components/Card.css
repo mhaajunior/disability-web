@@ -1,0 +1,31 @@
+.card {
+  width: 100%;
+  min-height: 150px;
+  box-sizing: border-box;
+  padding: 2em;
+  /* color: white; */
+  line-height: 25px;
+  box-shadow: 5px 5px 10px #ccc;
+  float: left;
+  margin: 1em 0;
+}
+
+.br-10 {
+  border-radius: 10px;
+}
+
+.border-bold {
+  border: 1px solid var(--primary);
+}
+
+.card.purple {
+  background: linear-gradient(150deg, #f731db, #4600f1 100%);
+}
+
+.card.gray {
+  background: linear-gradient(135deg, #e3e3e3 0%, #5d6874 100%);
+}
+
+.card.green {
+  background: #b3ffec;
+}

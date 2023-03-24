@@ -1,0 +1,65 @@
+.dropdown {
+  border: 1px solid var(--gray);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dropdown:focus {
+  border: 1px solid var(--primary);
+}
+
+.select {
+  border: 1px solid var(--gray);
+  border-radius: 10px;
+  width: calc(100% + 10px);
+  left: -5px;
+  background-color: white;
+}
+
+.select div {
+  background-color: white;
+  border-radius: inherit;
+  padding: 10px;
+}
+
+.select div:hover {
+  background-color: var(--primary);
+  border-radius: inherit;
+  color: white;
+  opacity: 0.7;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.addText {
+  display: inline-block;
+  width: 0;
+  white-space: nowrap;
+  /* direction: ltr;
+  transition: 0.5s;
+  transform: translateX(0);
+  pointer-events: none; */
+}
+
+.ellipsis:hover .addText {
+  /* transform: translateX(-80px); */
+  animation: slide 2s linear infinite;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0%);
+  }
+
+  50% {
+    transform: translateX(calc(100% - 100px));
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
