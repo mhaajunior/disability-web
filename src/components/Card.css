@@ -1,6 +1,6 @@
 .card {
   width: 100%;
-  min-height: 150px;
+  min-height: 50px;
   box-sizing: border-box;
   padding: 2em;
   /* color: white; */
@@ -28,4 +28,12 @@
 
 .card.green {
   background: #b3ffec;
+}
+
+.card.red {
+  background: #ffb3b3;
+}
+
+.card.yellow {
+  background: #ffff80;
 }

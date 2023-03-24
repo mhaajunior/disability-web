@@ -4,7 +4,7 @@
   padding: 10px;
 }
 
-.dropdown:focus {
+.dropdown:hover {
   border: 1px solid var(--primary);
 }
 
@@ -35,31 +35,10 @@
   text-overflow: ellipsis;
 }
 
-.addText {
-  display: inline-block;
-  width: 0;
-  white-space: nowrap;
-  /* direction: ltr;
-  transition: 0.5s;
-  transform: translateX(0);
-  pointer-events: none; */
+.error .label {
+  color: red;
 }
 
-.ellipsis:hover .addText {
-  /* transform: translateX(-80px); */
-  animation: slide 2s linear infinite;
-}
-
-@keyframes slide {
-  0% {
-    transform: translateX(0%);
-  }
-
-  50% {
-    transform: translateX(calc(100% - 100px));
-  }
-
-  100% {
-    transform: translateX(0%);
-  }
+.error .dropdown {
+  border-color: red;
 }

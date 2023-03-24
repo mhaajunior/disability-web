@@ -2,12 +2,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { changeHousehold } from "../store";
 import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
+import $ from "jquery";
 import "./Dropdown.css";
 
-const Dropdown = ({ label, options, name, main }) => {
+const Dropdown = ({ label, options, name, validate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const divEl = useRef();
+  const textEl = useRef();
+  const parentEl = useRef();
   const dispatch = useDispatch();
   const household = useSelector((state) => {
     return state.householdForm;
@@ -33,6 +36,7 @@ const Dropdown = ({ label, options, name, main }) => {
 
   const handleOptionClick = (option, name) => {
     setIsOpen(false);
+    $("#dropdown_group").removeClass("error");
     setSelected(option.name);
     dispatch(changeHousehold({ name, value: option.id }));
   };
@@ -59,20 +63,62 @@ const Dropdown = ({ label, options, name, main }) => {
     }
   };
 
+  const startMarquee = () => {
+    let menuItemWidth = $(textEl.current).width();
+    let listItemWidth = $(parentEl.current).width();
+
+    if (menuItemWidth > listItemWidth) {
+      let scrollDistance = menuItemWidth - listItemWidth;
+      let listItem = $(parentEl.current);
+      listItem.stop();
+      listItem.animate(
+        {
+          scrollLeft: scrollDistance,
+        },
+        1000,
+        "linear"
+      );
+    }
+  };
+
+  const stopMarquee = () => {
+    let listItem = $(parentEl.current);
+    listItem.stop();
+    listItem.animate(
+      {
+        scrollLeft: 0,
+      },
+      "medium",
+      "swing"
+    );
+  };
+
   return (
-    <div className="flex justify-between p-5 items-center">
-      <label className="pr-7 font-bold w-24">{name.toUpperCase()}</label>
+    <div
+      id="dropdown_group"
+      className={`flex justify-between p-5 items-center ${
+        validate !== null && !validate && "error"
+      }`}
+    >
+      <label className="pr-7 font-bold w-24 label">{name.toUpperCase()}</label>
       <div
         name={name}
-        className="dropdown sm:w-72 w-48 relative"
+        className="dropdown sm:w-72 w-48 relative cursor-pointer"
         value={household[name]}
         ref={divEl}
+        onClick={() => setIsOpen(!isOpen)}
       >
         <div
-          className="flex justify-between items-center cursor-pointer ellipsis"
-          onClick={() => setIsOpen(!isOpen)}
+          ref={parentEl}
+          className="flex justify-between items-center  ellipsis"
         >
-          <div className="addText">{selected || `-- ${label} --`}</div>
+          <span
+            ref={textEl}
+            onMouseEnter={startMarquee}
+            onMouseLeave={stopMarquee}
+          >
+            {selected || `-- ${label} --`}
+          </span>
           <div className="absolute right-2 h-full flex items-center bg-white">
             <GoChevronDown className="text-lg" />
           </div>

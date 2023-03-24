@@ -4,13 +4,23 @@ import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
 import Button from "./Button";
 import "./Card.css";
 
-const Card = ({ children, primary, hoverable, ...rest }) => {
+const Card = ({
+  children,
+  primary,
+  hoverable,
+  success,
+  warning,
+  error,
+  ...rest
+}) => {
   const [isHover, setIsHover] = useState(false);
   const classes = classNames(
     rest.className,
     "card br-10 flex justify-between relative",
     {
-      green: primary,
+      green: success,
+      red: error,
+      yellow: warning,
       "cursor-pointer": hoverable,
       "border-bold": hoverable && isHover,
     }

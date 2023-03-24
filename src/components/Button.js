@@ -10,7 +10,7 @@ const Button = ({
   rounded,
   ...rest
 }) => {
-  const classes = classNames(rest.className, "flex items-center px-3 py-1.5", {
+  const classes = classNames(rest.className, "flex items-center px-3 py-2", {
     "btn-grad": primary,
     "btn-blue": secondary,
     "btn-danger": danger,

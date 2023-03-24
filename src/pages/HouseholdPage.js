@@ -20,7 +20,7 @@ const HouseholdPage = () => {
         </Button>
       </Header>
       <Card className="mt-5">
-        <Card primary hoverable="true">
+        <Card success hoverable>
           fsfesfsefsefsef
         </Card>
       </Card>

@@ -13,7 +13,7 @@ const householdSlice = createSlice({
     psu_no: "",
     ea_set: "",
     month: "",
-    yr: (new Date().getFullYear() + 543).toString().slice(-2),
+    yr: "",
     hh_no: "",
     list_gr: "",
     enum_gr: "",
