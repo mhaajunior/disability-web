@@ -1,20 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import { changeHousehold } from "../store";
+import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
 import $ from "jquery";
 import "./Dropdown.css";
 
-const Dropdown = ({ label, options, name, validate }) => {
+const Dropdown = ({ label, options, name, value, dispatchFn }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const divEl = useRef();
   const textEl = useRef();
   const parentEl = useRef();
   const dispatch = useDispatch();
-  const household = useSelector((state) => {
-    return state.householdForm;
-  });
 
   useEffect(() => {
     const handler = (e) => {
@@ -34,11 +30,19 @@ const Dropdown = ({ label, options, name, validate }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const filteredOption = options.filter((option) => option.id === value);
+    if (filteredOption.length !== 0) {
+      setSelected(filteredOption[0].name);
+    } else {
+      setSelected("");
+    }
+  }, [value, options]);
+
   const handleOptionClick = (option, name) => {
     setIsOpen(false);
-    $(`#dropdown_group_${name}`).removeClass("error");
     setSelected(option.name);
-    dispatch(changeHousehold({ name, value: option.id }));
+    dispatch(dispatchFn(name, option.id));
   };
 
   const renderedOptions = () => {
@@ -52,7 +56,7 @@ const Dropdown = ({ label, options, name, validate }) => {
           <div
             key={option.name}
             className={`cursor-pointer p-1 ${
-              household[name] === option.id && "selected"
+              value === option.id ? "selected" : ""
             }`}
             value={option.id}
             onClick={() => handleOptionClick(option, name)}
@@ -97,40 +101,32 @@ const Dropdown = ({ label, options, name, validate }) => {
 
   return (
     <div
-      id={`dropdown_group_${name}`}
-      className={`flex justify-between p-5 items-center dropdown-group ${
-        validate !== undefined && !validate && "error"
-      }`}
+      name={name}
+      className="dropdown sm:w-72 w-48 relative cursor-pointer"
+      value={value}
+      ref={divEl}
+      onClick={() => setIsOpen(!isOpen)}
     >
-      <label className="pr-7 font-bold w-24 label">{name.toUpperCase()}</label>
       <div
-        name={name}
-        className="dropdown sm:w-72 w-48 relative cursor-pointer"
-        value={household[name]}
-        ref={divEl}
-        onClick={() => setIsOpen(!isOpen)}
+        ref={parentEl}
+        className="flex justify-between items-center ellipsis"
       >
-        <div
-          ref={parentEl}
-          className="flex justify-between items-center  ellipsis"
+        <span
+          ref={textEl}
+          onMouseEnter={startMarquee}
+          onMouseLeave={stopMarquee}
         >
-          <span
-            ref={textEl}
-            onMouseEnter={startMarquee}
-            onMouseLeave={stopMarquee}
-          >
-            {selected || `-- ${label} --`}
-          </span>
-          <div className="absolute right-2 h-full flex items-center bg-white">
-            <GoChevronDown className="text-lg" />
-          </div>
+          {selected || `-- ${label} --`}
+        </span>
+        <div className="absolute right-2 h-full flex items-center bg-white">
+          <GoChevronDown className="text-lg" />
         </div>
-        {isOpen && (
-          <div className="absolute top-full select z-20">
-            {renderedOptions()}
-          </div>
-        )}
       </div>
+      {isOpen && (
+        <div className="absolute top-full select z-20 scrollbar-thin scrollbar-thumb-custom scrollbar-thumb-rounded-full overflow-y-scroll">
+          {renderedOptions()}
+        </div>
+      )}
     </div>
   );
 };

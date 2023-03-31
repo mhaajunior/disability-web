@@ -304,7 +304,7 @@ export const districts = [
   { id: "23", name: "เฉลิมพระเกียรติ", province: "80" },
 ];
 
-export const subDistricts = [];
+export const subDistricts = [{ id: "01", name: "พระนคร", province: "10" }];
 
 export const protectionArea = [
   { id: "1", name: "ในเขตเทศบาล" },
@@ -340,7 +340,7 @@ export const listGr = [
   { id: "3", name: "ครัวเรือนอื่น ๆ" },
 ];
 
-export const enumGr = [...listGr, { id: "", name: "ไม่เข้าข่าย" }];
+export const enumGr = [...listGr, { id: "-1", name: "ไม่เข้าข่าย" }];
 
 const members = [];
 for (let i = 1; i <= 98; i++) {
@@ -353,7 +353,7 @@ export const listing = [
   ...members,
 ];
 
-members.push({ id: "", name: "ไม่เข้าข่าย" });
+members.push({ id: "-1", name: "ไม่เข้าข่าย" });
 export { members };
 
 const memDis = [];
@@ -361,7 +361,7 @@ for (let i = 0; i <= 98; i++) {
   const trail = String(i).padStart(2, "0");
   memDis.push({ id: trail, name: `จำนวนสมาชิกที่พิการ ${i} คน` });
 }
-memDis.push({ id: "", name: "ไม่เข้าข่าย" });
+memDis.push({ id: "-1", name: "ไม่เข้าข่าย" });
 export { memDis };
 
 export const _enum = [

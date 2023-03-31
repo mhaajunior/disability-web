@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Header from "../components/Header";
 import { IoChevronBack } from "react-icons/io5";
 import { BsSend } from "react-icons/bs";
 import { BiErrorCircle } from "react-icons/bi";
-import Dropdown from "../components/Dropdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import $ from "jquery";
 import {
   regions,
@@ -24,211 +24,281 @@ import {
   listing,
   memDis,
   _enum,
-} from "../assets/resource";
-import { useState } from "react";
+} from "../assets/householdResource";
+import {
+  changeHousehold,
+  clearHouseholdData,
+  updateAllHouseholdData,
+  useAddHouseholdMutation,
+  useEditHouseholdMutation,
+} from "../store";
+import axios from "axios";
+import InputGroup from "../components/inputGroup/InputGroup";
 
-const AddHousehold = () => {
-  const [passValidate, setPassValidate] = useState([]);
-  const household = useSelector((state) => {
+const AddHousehold = ({ type }) => {
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const [addHousehold] = useAddHouseholdMutation();
+  const [editHousehold] = useEditHouseholdMutation();
+  const { data, status } = useSelector((state) => {
     return state.householdForm;
   });
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    $("html,body").scrollTop(0);
+    const fetchData = async () => {
+      const { data } = await axios.get("http://localhost:3005/households", {
+        params: { id },
+      });
+      dispatch(updateAllHouseholdData(data));
+    };
+
+    if (type === "edit") {
+      fetchData();
+    } else {
+      dispatch(clearHouseholdData());
+    }
+  }, [id, dispatch, type]);
 
   const navigateBack = () => {
     navigate("/");
   };
 
   const filterdProvinces = provinces.filter(
-    (province) => province.region === household.reg
+    (province) => province.region === data.reg
   );
 
   const filterdDistricts = districts.filter(
-    (district) => district.province === household.cwt
+    (district) => district.province === data.cwt
   );
 
-  const inputs = [
-    {
-      id: 1,
-      label: "ภาค",
-      name: "reg",
-      options: regions,
-      validate: passValidate[0],
-    },
-    {
-      id: 2,
-      label: "จังหวัด",
-      name: "cwt",
-      options: filterdProvinces,
-      validate: passValidate[1],
-    },
-    {
-      id: 3,
-      label: "อำเภอ/เขต",
-      name: "amp",
-      options: filterdDistricts,
-      validate: passValidate[2],
-    },
-    {
-      id: 4,
-      label: "ตำบล/แขวง",
-      name: "tmb",
-      options: subDistricts,
-      validate: passValidate[3],
-    },
-    {
-      id: 5,
-      label: "เขตการปกตรอง",
-      name: "area",
-      options: protectionArea,
-      validate: passValidate[4],
-    },
-    {
-      id: 6,
-      label: "เขตแจงนับ",
-      name: "ea",
-      options: subDistricts,
-      validate: passValidate[5],
-    },
-    {
-      id: 7,
-      label: "หมู่ที่/หมู่บ้าน",
-      name: "vil",
-      options: subDistricts,
-      validate: passValidate[6],
-    },
-    {
-      id: 8,
-      label: "ลำดับที่ EA ตัวอย่าง",
-      name: "psu_no",
-      options: subDistricts,
-      validate: passValidate[7],
-    },
-    {
-      id: 9,
-      label: "ชุด EA ตัวอย่าง",
-      name: "ea_set",
-      options: eaSet,
-      validate: passValidate[8],
-    },
-    {
-      id: 10,
-      label: "เดือนที่สำรวจ",
-      name: "month",
-      options: month,
-      validate: passValidate[9],
-    },
-    {
-      id: 11,
-      label: "ปีที่สำรวจ",
-      name: "yr",
-      options: year,
-      validate: passValidate[10],
-    },
-    {
-      id: 12,
-      label: "ลำดับที่ครัวเรือนส่วนบุคคลตัวอย่าง",
-      name: "hh_no",
-      options: hhNo,
-      validate: passValidate[11],
-    },
-    {
-      id: 13,
-      label: "กลุ่มครัวเรือนตัวอย่างขั้นนับจด",
-      name: "list_gr",
-      options: listGr,
-      validate: passValidate[12],
-    },
-    {
-      id: 14,
-      label: "กลุ่มครัวเรือนตัวอย่างขั้นแจงนับ",
-      name: "enum_gr",
-      options: enumGr,
-      validate: passValidate[13],
-    },
-    {
-      id: 15,
-      label: "จำนวนสมาชิกในครัวเรือนขั้นแจงนับ",
-      name: "members",
-      options: members,
-      validate: passValidate[14],
-    },
-    {
-      id: 16,
-      label: "จำนวนสมาชิกในครัวเรือนขั้นนับจด",
-      name: "listing",
-      options: listing,
-      validate: passValidate[15],
-    },
-    {
-      id: 17,
-      label: "จำนวนสมาชิกที่พิการในครัวเรือน ขั้นแจงนับ",
-      name: "mem_dis",
-      options: memDis,
-      validate: passValidate[16],
-    },
-    {
-      id: 18,
-      label: "ผลการแจงนับครัวเรือนตัวอย่าง",
-      name: "enum",
-      options: _enum,
-      validate: passValidate[17],
-    },
-  ];
-
-  const checkValidate = () => {
-    let validationArr = [];
-    for (const key in household) {
-      if (household.hasOwnProperty(key)) {
-        if (!household[key]) {
-          validationArr.push(false);
-        } else {
-          validationArr.push(true);
-        }
-      }
+  const checkInputError = (name) => {
+    if (formErrors.hasOwnProperty(name)) {
+      return false;
     }
-    setPassValidate(validationArr);
-    return validationArr.every((element) => element === true);
+
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (checkValidate()) {
-      console.log("hi");
-    } else {
-      $("html, body").animate({ scrollTop: 0 }, "fast");
+    setFormErrors(validate(data));
+    setIsSubmit(true);
+  };
+
+  const validate = (values) => {
+    const errors = {};
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        if (!values[key]) {
+          errors[key] = true;
+        }
+      }
     }
+  };
+
+  const inputs = [
+    {
+      id: 1,
+      type: "dropdown",
+      label: "ภาค",
+      name: "reg",
+      options: regions,
+      isValid: checkInputError("reg"),
+    },
+    {
+      id: 2,
+      type: "dropdown",
+      label: "จังหวัด",
+      name: "cwt",
+      options: filterdProvinces,
+      isValid: checkInputError("cwt"),
+    },
+    {
+      id: 3,
+      type: "dropdown",
+      label: "อำเภอ/เขต",
+      name: "amp",
+      options: filterdDistricts,
+      isValid: checkInputError("amp"),
+    },
+    {
+      id: 4,
+      type: "dropdown",
+      label: "ตำบล/แขวง",
+      name: "tmb",
+      options: subDistricts,
+      isValid: checkInputError("tmb"),
+    },
+    {
+      id: 5,
+      type: "dropdown",
+      label: "เขตการปกตรอง",
+      name: "area",
+      options: protectionArea,
+      isValid: checkInputError("area"),
+    },
+    {
+      id: 6,
+      type: "dropdown",
+      label: "เขตแจงนับ",
+      name: "ea",
+      options: subDistricts,
+      isValid: checkInputError("ea"),
+    },
+    {
+      id: 7,
+      type: "dropdown",
+      label: "หมู่ที่/หมู่บ้าน",
+      name: "vil",
+      options: subDistricts,
+      isValid: checkInputError("vil"),
+    },
+    {
+      id: 8,
+      type: "dropdown",
+      label: "ลำดับที่ EA ตัวอย่าง",
+      name: "psu_no",
+      options: subDistricts,
+      isValid: checkInputError("psu_no"),
+    },
+    {
+      id: 9,
+      type: "dropdown",
+      label: "ชุด EA ตัวอย่าง",
+      name: "ea_set",
+      options: eaSet,
+      isValid: checkInputError("ea_set"),
+    },
+    {
+      id: 10,
+      type: "dropdown",
+      label: "เดือนที่สำรวจ",
+      name: "month",
+      options: month,
+      isValid: checkInputError("month"),
+    },
+    {
+      id: 11,
+      type: "dropdown",
+      label: "ปีที่สำรวจ",
+      name: "yr",
+      options: year,
+      isValid: checkInputError("yr"),
+    },
+    {
+      id: 12,
+      type: "dropdown",
+      label: "ลำดับที่ครัวเรือนส่วนบุคคลตัวอย่าง",
+      name: "hh_no",
+      options: hhNo,
+      isValid: checkInputError("hh_no"),
+    },
+    {
+      id: 13,
+      type: "dropdown",
+      label: "กลุ่มครัวเรือนตัวอย่างขั้นนับจด",
+      name: "list_gr",
+      options: listGr,
+      isValid: checkInputError("list_gr"),
+    },
+    {
+      id: 14,
+      type: "dropdown",
+      label: "กลุ่มครัวเรือนตัวอย่างขั้นแจงนับ",
+      name: "enum_gr",
+      options: enumGr,
+      isValid: checkInputError("enum_gr"),
+    },
+    {
+      id: 15,
+      type: "dropdown",
+      label: "จำนวนสมาชิกในครัวเรือนขั้นแจงนับ",
+      name: "members",
+      options: members,
+      isValid: checkInputError("members"),
+    },
+    {
+      id: 16,
+      type: "dropdown",
+      label: "จำนวนสมาชิกในครัวเรือนขั้นนับจด",
+      name: "listing",
+      options: listing,
+      isValid: checkInputError("listing"),
+    },
+    {
+      id: 17,
+      type: "dropdown",
+      label: "จำนวนสมาชิกที่พิการในครัวเรือน ขั้นแจงนับ",
+      name: "mem_dis",
+      options: memDis,
+      isValid: checkInputError("mem_dis"),
+    },
+    {
+      id: 18,
+      type: "dropdown",
+      label: "ผลการแจงนับครัวเรือนตัวอย่าง",
+      name: "enum",
+      options: _enum,
+      isValid: checkInputError("enum"),
+    },
+  ];
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (checkValidate()) {
+  //     if (type === "add") {
+  //       addHousehold({ data, status });
+  //     } else {
+  //       editHousehold({ id, data });
+  //     }
+  //     navigateBack();
+  //   } else {
+  //     $("html, body").animate({ scrollTop: 0 }, "fast");
+  //   }
+  // };
+
+  const clearData = () => {
+    dispatch(clearHouseholdData());
   };
 
   return (
     <>
-      <Header title="เพิ่มครัวเรือน">
-        <Button secondary onClick={navigateBack}>
-          <IoChevronBack className="mr-1" />
-          กลับ
-        </Button>
+      <Header title={type === "add" ? "เพิ่มครัวเรือน" : "แก้ไขครัวเรือน"}>
+        <div className="flex flex-row">
+          <Button danger onClick={clearData}>
+            ล้างข้อมูลเดิม
+          </Button>
+          <Button secondary onClick={navigateBack}>
+            <IoChevronBack className="mr-1" />
+            กลับ
+          </Button>
+        </div>
       </Header>
-      {passValidate.length !== 0 &&
-        !passValidate.every((element) => element === true) && (
-          <Card error>
-            <div>
-              <BiErrorCircle className="mr-2 inline-block text-xl pb-1" />
-              กรุณากรอกข้อมูลให้ครบทุกช่อง
-            </div>
-          </Card>
-        )}
+      {formErrors && (
+        <Card error>
+          <div className="text-red-600">
+            <BiErrorCircle className="mr-2 inline-block text-xl pb-1" />
+            กรุณากรอกข้อมูลให้ครบทุกช่อง
+          </div>
+        </Card>
+      )}
       <Card className="mt-5">
-        <form
-          className="w-full flex flex-wrap justify-evenly"
-          onSubmit={handleSubmit}
-        >
+        <form className="w-full flex flex-wrap" onSubmit={handleSubmit}>
           {inputs.map((input) => {
             return (
-              <Dropdown
+              <InputGroup
                 key={input.id}
+                type="dropdown"
                 label={input.label}
                 options={input.options}
                 name={input.name}
+                value={data[input.name]}
                 validate={input.validate}
+                dispatchFn={(name, value) => changeHousehold({ name, value })}
               />
             );
           })}

@@ -1,19 +1,25 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import "./Card.css";
 
 const Card = ({
   children,
-  primary,
   hoverable,
+  id,
   success,
   warning,
   error,
+  hoverWord,
+  onEdit,
+  onDelete,
+  path,
   ...rest
 }) => {
   const [isHover, setIsHover] = useState(false);
+  const navigate = useNavigate();
   const classes = classNames(
     rest.className,
     "card br-10 flex justify-between relative",
@@ -29,6 +35,7 @@ const Card = ({
   return (
     <div
       {...rest}
+      id={id}
       className={classes}
       onMouseEnter={() => hoverable && setIsHover(true)}
       onMouseLeave={() => hoverable && setIsHover(false)}
@@ -36,15 +43,18 @@ const Card = ({
       {children}
       {isHover && (
         <>
-          <div className="absolute inset-0 w-full h-full bg-gray-300 opacity-80 br-10 flex justify-center items-center">
-            กดเพื่อดูสมาชิกในครัวเรือน
+          <div
+            onClick={() => navigate(path)}
+            className="absolute inset-0 w-full h-full bg-gray-300 opacity-80 br-10 flex justify-center items-center"
+          >
+            {hoverWord}
           </div>
-          <div className="flex z-20">
+          <div className="flex items-center z-20">
             <div>
-              <Button warning rounded>
+              <Button warning rounded onClick={() => onEdit(id)}>
                 <RiEditLine />
               </Button>
-              <Button danger rounded>
+              <Button danger rounded onClick={() => onDelete(id)}>
                 <RiDeleteBin6Line />
               </Button>
             </div>
@@ -56,8 +66,8 @@ const Card = ({
 };
 
 Card.propTypes = {
-  checkVariation: ({ primary }) => {
-    const count = Number(!!primary);
+  checkVariation: ({ success, warning, error }) => {
+    const count = Number(!!success) + Number(!!warning) + Number(!!error);
 
     if (count > 1) {
       return new Error("Invalid props");

@@ -27,13 +27,13 @@
 }
 
 .card.green {
-  background: #b3ffec;
+  background: linear-gradient(135deg, #70ebb8 0%, #e3e3e3 100%);
 }
 
 .card.red {
-  background: #ffb3b3;
+  background: linear-gradient(135deg, #f68579 0%, #e3e3e3 100%);
 }
 
 .card.yellow {
-  background: #ffff80;
+  background: linear-gradient(135deg, #efda50 0%, #e3e3e3 100%);
 }

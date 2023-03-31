@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import "./Button.css";
 
 const Button = ({
@@ -8,6 +9,7 @@ const Button = ({
   warning,
   danger,
   rounded,
+  loading,
   ...rest
 }) => {
   const classes = classNames(rest.className, "flex items-center px-3 py-2", {
@@ -20,7 +22,11 @@ const Button = ({
 
   return (
     <button {...rest} className={classes}>
-      {children}
+      {loading ? (
+        <AiOutlineLoading3Quarters className="animate-spin txt-primary" />
+      ) : (
+        children
+      )}
     </button>
   );
 };

@@ -1,0 +1,33 @@
+.progress-circle {
+  border: 3px solid var(--gray);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.progress-line {
+  border-top: 3px solid var(--gray);
+  width: 100px;
+}
+
+.active .progress-circle {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.active .progress-line {
+  border-color: var(--primary);
+}
+
+.active.cursor-pointer .progress-circle:hover {
+  opacity: 0.5;
+}
+
+.current .progress-circle {
+  background-color: var(--primary);
+  color: white;
+}

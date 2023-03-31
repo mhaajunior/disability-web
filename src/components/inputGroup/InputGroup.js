@@ -1,0 +1,44 @@
+import Dropdown from "../inputGroup/Dropdown";
+import Input from "../inputGroup/Input";
+import classNames from "classnames";
+
+const InputGroup = ({
+  type,
+  label,
+  options,
+  name,
+  value,
+  dispatchFn,
+  isValid,
+  isShow,
+}) => {
+  const classes = classNames("flex justify-between p-5 items-center", {
+    error: !isValid,
+    hidden: isShow && !isShow(),
+  });
+
+  return (
+    <div id={`${type}_group_${name}`} className={classes}>
+      <label className="pr-7 font-bold w-24 label">{name.toUpperCase()}</label>
+      {type === "dropdown" && (
+        <Dropdown
+          label={label}
+          options={options}
+          name={name}
+          value={value}
+          dispatchFn={dispatchFn}
+        />
+      )}
+      {type === "input" && (
+        <Input
+          label={label}
+          name={name}
+          value={value}
+          dispatchFn={dispatchFn}
+        />
+      )}
+    </div>
+  );
+};
+
+export default InputGroup;

@@ -5,24 +5,36 @@ import {
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
 } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Header from "../components/Header";
 import { useDeleteHouseholdMutation, useFetchHouseholdsQuery } from "../store";
+import { useEffect } from "react";
+import $ from "jquery";
 
-const HouseholdPage = () => {
+const MembersPage = () => {
   const { data, error, isFetching } = useFetchHouseholdsQuery();
   const [deleteHousehold, results] = useDeleteHouseholdMutation();
   const navigate = useNavigate();
+  const { household_id } = useParams();
+
+  useEffect(() => {
+    $("html,body").scrollTop(0);
+  }, []);
 
   const navigateAdd = () => {
-    navigate("/addHousehold");
+    navigate(`/addMember/${household_id}`);
+  };
+
+  const navigateBack = () => {
+    navigate("/");
   };
 
   const handleEdit = (id) => {
-    navigate(`/editHousehold/${id}`);
+    navigate(`/editMember/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -50,7 +62,7 @@ const HouseholdPage = () => {
   } else if (error) {
     content = <div className="text-red-600">เกิดข้อผิดพลาดในการแสดงข้อมูล</div>;
   } else if (data.length === 0) {
-    content = <div>ไม่มีรายการครัวเรือนที่จะแสดง</div>;
+    content = <div>ไม่มีสมาชิกที่จะแสดง</div>;
   } else {
     content = data.map((household) => {
       let { status } = household;
@@ -96,7 +108,7 @@ const HouseholdPage = () => {
           hoverWord="กดเพื่อดูสมาชิกในครัวเรือน"
           onDelete={handleDelete}
           onEdit={handleEdit}
-          path={`/members/${household.id}`}
+          onClick={() => navigate(`/members/${household.id}`)}
           className="relative"
         >
           {pic}
@@ -123,15 +135,21 @@ const HouseholdPage = () => {
 
   return (
     <>
-      <Header title="รายละเอียดครัวเรือน">
-        <Button primary onClick={navigateAdd}>
-          <IoIosAddCircle className="mr-2" />
-          เพิ่มครัวเรือน
-        </Button>
+      <Header title="รายละเอียดสมาชิกภายในครัวเรือน">
+        <div className="flex flex-row">
+          <Button primary onClick={navigateAdd}>
+            <IoIosAddCircle className="mr-2" />
+            เพิ่มสมาชิก
+          </Button>
+          <Button secondary onClick={navigateBack}>
+            <IoChevronBack className="mr-1" />
+            กลับ
+          </Button>
+        </div>
       </Header>
-      <Card className="mt-5 flex-col">{content}</Card>
+      <Card className="mt-5 flex-col">{}</Card>
     </>
   );
 };
 
-export default HouseholdPage;
+export default MembersPage;

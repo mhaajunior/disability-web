@@ -17,3 +17,7 @@
 body {
   font-family: "Sarabun";
 }
+
+.txt-primary {
+  color: var(--primary);
+}
