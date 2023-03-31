@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -240,9 +240,9 @@ const AddHousehold = ({ type }) => {
     return true;
   };
 
-  const navigateBack = useCallback(() => {
+  const navigateBack = () => {
     navigate("/");
-  }, [navigate]);
+  };
 
   const clearData = () => {
     dispatch(clearHouseholdData());
