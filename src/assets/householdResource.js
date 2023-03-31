@@ -308,7 +308,7 @@ export const subDistricts = [{ id: "01", name: "พระนคร", province: "
 
 export const protectionArea = [
   { id: "1", name: "ในเขตเทศบาล" },
-  { id: "1", name: "นอกเขตเทศบาล" },
+  { id: "2", name: "นอกเขตเทศบาล" },
 ];
 
 export const eaSet = [

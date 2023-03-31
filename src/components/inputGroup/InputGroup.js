@@ -12,7 +12,7 @@ const InputGroup = ({
   isValid,
   isShow,
 }) => {
-  const classes = classNames("flex justify-between p-5 items-center", {
+  const classes = classNames("flex justify-between py-5 px-8 items-center", {
     error: !isValid,
     hidden: isShow && !isShow(),
   });

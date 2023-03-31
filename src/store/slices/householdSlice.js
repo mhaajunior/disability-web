@@ -60,6 +60,13 @@ const householdSlice = createSlice({
       }
     );
     builder.addMatcher(
+      householdsApi.endpoints.editHousehold.matchFulfilled,
+      (state) => {
+        toastr["success"]("ทำการแก้ไขครัวเรือนสำเร็จ");
+        Object.keys(state.data).forEach((index) => (state.data[index] = ""));
+      }
+    );
+    builder.addMatcher(
       householdsApi.endpoints.deleteHousehold.matchFulfilled,
       () => {
         toastr["success"]("ทำการลบครัวเรือนสำเร็จ");

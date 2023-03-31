@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -36,8 +36,7 @@ import axios from "axios";
 import InputGroup from "../components/inputGroup/InputGroup";
 
 const AddHousehold = ({ type }) => {
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [formErrors, setFormErrors] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -63,10 +62,6 @@ const AddHousehold = ({ type }) => {
     }
   }, [id, dispatch, type]);
 
-  const navigateBack = () => {
-    navigate("/");
-  };
-
   const filterdProvinces = provinces.filter(
     (province) => province.region === data.reg
   );
@@ -76,34 +71,17 @@ const AddHousehold = ({ type }) => {
   );
 
   const checkInputError = (name) => {
-    if (formErrors.hasOwnProperty(name)) {
+    const found = formErrors.find((elm) => elm === name);
+    if (found) {
       return false;
     }
 
     return true;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormErrors(validate(data));
-    setIsSubmit(true);
-  };
-
-  const validate = (values) => {
-    const errors = {};
-    for (const key in values) {
-      if (values.hasOwnProperty(key)) {
-        if (!values[key]) {
-          errors[key] = true;
-        }
-      }
-    }
-  };
-
   const inputs = [
     {
       id: 1,
-      type: "dropdown",
       label: "ภาค",
       name: "reg",
       options: regions,
@@ -111,7 +89,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 2,
-      type: "dropdown",
       label: "จังหวัด",
       name: "cwt",
       options: filterdProvinces,
@@ -119,7 +96,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 3,
-      type: "dropdown",
       label: "อำเภอ/เขต",
       name: "amp",
       options: filterdDistricts,
@@ -127,7 +103,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 4,
-      type: "dropdown",
       label: "ตำบล/แขวง",
       name: "tmb",
       options: subDistricts,
@@ -135,7 +110,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 5,
-      type: "dropdown",
       label: "เขตการปกตรอง",
       name: "area",
       options: protectionArea,
@@ -143,7 +117,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 6,
-      type: "dropdown",
       label: "เขตแจงนับ",
       name: "ea",
       options: subDistricts,
@@ -151,7 +124,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 7,
-      type: "dropdown",
       label: "หมู่ที่/หมู่บ้าน",
       name: "vil",
       options: subDistricts,
@@ -159,7 +131,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 8,
-      type: "dropdown",
       label: "ลำดับที่ EA ตัวอย่าง",
       name: "psu_no",
       options: subDistricts,
@@ -167,7 +138,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 9,
-      type: "dropdown",
       label: "ชุด EA ตัวอย่าง",
       name: "ea_set",
       options: eaSet,
@@ -175,7 +145,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 10,
-      type: "dropdown",
       label: "เดือนที่สำรวจ",
       name: "month",
       options: month,
@@ -183,7 +152,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 11,
-      type: "dropdown",
       label: "ปีที่สำรวจ",
       name: "yr",
       options: year,
@@ -191,7 +159,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 12,
-      type: "dropdown",
       label: "ลำดับที่ครัวเรือนส่วนบุคคลตัวอย่าง",
       name: "hh_no",
       options: hhNo,
@@ -199,7 +166,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 13,
-      type: "dropdown",
       label: "กลุ่มครัวเรือนตัวอย่างขั้นนับจด",
       name: "list_gr",
       options: listGr,
@@ -207,7 +173,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 14,
-      type: "dropdown",
       label: "กลุ่มครัวเรือนตัวอย่างขั้นแจงนับ",
       name: "enum_gr",
       options: enumGr,
@@ -215,7 +180,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 15,
-      type: "dropdown",
       label: "จำนวนสมาชิกในครัวเรือนขั้นแจงนับ",
       name: "members",
       options: members,
@@ -223,7 +187,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 16,
-      type: "dropdown",
       label: "จำนวนสมาชิกในครัวเรือนขั้นนับจด",
       name: "listing",
       options: listing,
@@ -231,7 +194,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 17,
-      type: "dropdown",
       label: "จำนวนสมาชิกที่พิการในครัวเรือน ขั้นแจงนับ",
       name: "mem_dis",
       options: memDis,
@@ -239,7 +201,6 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 18,
-      type: "dropdown",
       label: "ผลการแจงนับครัวเรือนตัวอย่าง",
       name: "enum",
       options: _enum,
@@ -247,19 +208,41 @@ const AddHousehold = ({ type }) => {
     },
   ];
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (checkValidate()) {
-  //     if (type === "add") {
-  //       addHousehold({ data, status });
-  //     } else {
-  //       editHousehold({ id, data });
-  //     }
-  //     navigateBack();
-  //   } else {
-  //     $("html, body").animate({ scrollTop: 0 }, "fast");
-  //   }
-  // };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate(data)) {
+      if (type === "add") {
+        addHousehold({ data, status });
+      } else {
+        editHousehold({ id, data });
+      }
+      navigateBack();
+    } else {
+      $("html, body").animate({ scrollTop: 0 }, "fast");
+    }
+  };
+
+  const validate = (values) => {
+    const errors = [];
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        if (!values[key]) {
+          errors.push(key);
+        }
+      }
+    }
+    setFormErrors(errors);
+
+    if (errors.length !== 0) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const navigateBack = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
 
   const clearData = () => {
     dispatch(clearHouseholdData());
@@ -278,7 +261,7 @@ const AddHousehold = ({ type }) => {
           </Button>
         </div>
       </Header>
-      {formErrors && (
+      {formErrors.length !== 0 && (
         <Card error>
           <div className="text-red-600">
             <BiErrorCircle className="mr-2 inline-block text-xl pb-1" />
@@ -297,7 +280,7 @@ const AddHousehold = ({ type }) => {
                 options={input.options}
                 name={input.name}
                 value={data[input.name]}
-                validate={input.validate}
+                isValid={input.isValid}
                 dispatchFn={(name, value) => changeHousehold({ name, value })}
               />
             );
