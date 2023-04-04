@@ -1,20 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import { changeMember } from "../../store";
 import Button from "../Button";
-import { f1, f2, f4, f5, f6, f7, f8, f9 } from "../../assets/memberResource";
-import { useCallback, useEffect, useState } from "react";
+import {
+  f1,
+  f2,
+  f4,
+  f5,
+  f6,
+  f7,
+  f8,
+  f9,
+} from "../../assets/memberResource/step1";
+import { useState } from "react";
 import $ from "jquery";
 import InputGroup from "../inputGroup/InputGroup";
 
-const Step1 = ({ onNext, onShowError }) => {
+const Step1 = ({ onNext, onShowError, onDisabled }) => {
   const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
   const dispatch = useDispatch();
   const step1 = useSelector((state) => {
     return state.memberForm.data.step1;
   });
 
-  const renderF9 = useCallback(() => {
+  const renderF9 = () => {
     if (step1["f6"]) {
       let num = parseInt(step1["f6"]);
       if (num >= 15) {
@@ -22,25 +30,7 @@ const Step1 = ({ onNext, onShowError }) => {
       }
     }
     return false;
-  }, [step1]);
-
-  useEffect(() => {
-    if (isSubmit) {
-      for (const key in formErrors) {
-        if (formErrors[key].fields.length > 0) {
-          $("html, body").animate({ scrollTop: 0 }, "fast");
-          onShowError(formErrors);
-          setIsSubmit(false);
-          return;
-        }
-      }
-
-      if (!renderF9()) {
-        dispatch(changeMember({ name: "f9", value: "", step: "step1" }));
-      }
-      onNext(2);
-    }
-  }, [formErrors, isSubmit, onNext, dispatch, renderF9, onShowError]);
+  };
 
   const checkInputError = (name) => {
     for (const key in formErrors) {
@@ -55,8 +45,26 @@ const Step1 = ({ onNext, onShowError }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormErrors(validate(step1));
-    setIsSubmit(true);
+    if (validate(step1)) {
+      if (!renderF9()) {
+        dispatch(changeMember({ name: "f9", value: "", step: "step1" }));
+      }
+
+      if (parseInt(step1["f6"]) >= 5) {
+        onDisabled([2], "remove");
+        onNext(2);
+      } else {
+        if (parseInt(step1["f6"]) < 15) {
+          onDisabled([2, 3], "add");
+          onNext(4);
+        } else {
+          onDisabled([2], "add");
+          onNext(3);
+        }
+      }
+    } else {
+      $("html, body").animate({ scrollTop: 0 }, "fast");
+    }
   };
 
   const validate = (values) => {
@@ -145,7 +153,16 @@ const Step1 = ({ onNext, onShowError }) => {
       errors[8].fields.push("f4", "f6", "f9");
     }
 
-    return errors;
+    setFormErrors(errors);
+    onShowError(errors);
+
+    for (const key in errors) {
+      if (errors[key].fields.length > 0) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   const inputs = [
@@ -155,7 +172,6 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "ลำดับที่",
       name: "f1",
       options: f1,
-      isValid: checkInputError("f1"),
     },
     {
       id: 2,
@@ -163,21 +179,18 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "คำนำหน้าชื่อ",
       name: "f2",
       options: f2,
-      isValid: checkInputError("f2"),
     },
     {
       id: 3,
       type: "input",
       label: "ชื่อ",
       name: "f3_1",
-      isValid: checkInputError("f3_1"),
     },
     {
       id: 4,
       type: "input",
       label: "นามสกุล",
       name: "f3_2",
-      isValid: checkInputError("f3_2"),
     },
     {
       id: 5,
@@ -185,7 +198,6 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "ความเกี่ยวพันกับหัวหน้าครัวเรือน",
       name: "f4",
       options: f4,
-      isValid: checkInputError("f4"),
     },
     {
       id: 6,
@@ -193,7 +205,6 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "เพศ",
       name: "f5",
       options: f5,
-      isValid: checkInputError("f5"),
     },
     {
       id: 7,
@@ -201,7 +212,6 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "อายุ",
       name: "f6",
       options: f6,
-      isValid: checkInputError("f6"),
     },
     {
       id: 8,
@@ -209,7 +219,6 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "สัญชาติ",
       name: "f7",
       options: f7,
-      isValid: checkInputError("f7"),
     },
     {
       id: 9,
@@ -217,7 +226,6 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "การได้รับสวัสดิการค่ารักษาพยาบาลหลักของรัฐ",
       name: "f8",
       options: f8,
-      isValid: checkInputError("f8"),
     },
     {
       id: 10,
@@ -225,7 +233,6 @@ const Step1 = ({ onNext, onShowError }) => {
       label: "สถานภาพสมรส",
       name: "f9",
       options: f9,
-      isValid: checkInputError("f9"),
       isShow: renderF9,
     },
   ];
@@ -245,7 +252,7 @@ const Step1 = ({ onNext, onShowError }) => {
               options={input.options || null}
               name={input.name}
               value={step1[input.name]}
-              isValid={input.isValid}
+              isValid={checkInputError(input.name)}
               dispatchFn={(name, value) =>
                 changeMember({ name, value, step: "step1" })
               }

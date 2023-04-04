@@ -1,6 +1,6 @@
 import "./FormProgress.css";
 
-const FormProgress = ({ total, current, onProgressClick }) => {
+const FormProgress = ({ total, current, onProgressClick, stepDisabled }) => {
   const arr = [];
   for (let i = 1; i <= total; i++) {
     arr.push(i);
@@ -12,10 +12,15 @@ const FormProgress = ({ total, current, onProgressClick }) => {
       classes += "active ";
     }
     if (i < current) {
-      classes += "cursor-pointer ";
+      classes += "cursor-pointerz ";
     }
     if (i === current) {
       classes += "current ";
+    }
+    if (stepDisabled.length > 0) {
+      if (stepDisabled.includes(i)) {
+        classes += "disabled ";
+      }
     }
     return classes;
   };
@@ -30,13 +35,11 @@ const FormProgress = ({ total, current, onProgressClick }) => {
     <div className="mt-8 mb-8 flex scrollbar-thin scrollbar-thumb-custom scrollbar-thumb-rounded-full h-32 overflow-x-scroll">
       {arr.map((i) => {
         return (
-          <div
-            key={i}
-            className={`flex items-center ${renderedClasses(i)}`}
-            onClick={() => handleClick(i)}
-          >
+          <div key={i} className={`flex items-center ${renderedClasses(i)}`}>
             {i !== 1 && <div className="progress-line"></div>}
-            <div className="progress-circle">{i}</div>
+            <div className="progress-circle" onClick={() => handleClick(i)}>
+              {i}
+            </div>
           </div>
         );
       })}

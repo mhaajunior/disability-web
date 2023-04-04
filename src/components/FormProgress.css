@@ -23,11 +23,23 @@
   border-color: var(--primary);
 }
 
-.active.cursor-pointer .progress-circle:hover {
+.cursor-pointerz .progress-circle {
+  cursor: pointer;
+}
+
+.active.cursor-pointerz .progress-circle:hover {
   opacity: 0.5;
 }
 
 .current .progress-circle {
   background-color: var(--primary);
   color: white;
+}
+
+.disabled {
+  pointer-events: none !important;
+}
+
+.disabled .progress-circle {
+  opacity: 0.5;
 }

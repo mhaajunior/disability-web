@@ -24,8 +24,9 @@ import { useDispatch } from "react-redux";
 import { clearStepMemberData } from "../store";
 
 const AddMemberPage = ({ type }) => {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   const [errors, setErrors] = useState(null);
+  const [stepDisabled, setStepDisabled] = useState([]);
   const { household_id: params_id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const AddMemberPage = ({ type }) => {
   useEffect(() => {
     $("html,body").scrollTop(0);
     setErrors(null);
-  }, []);
+  }, [step]);
 
   const navigateBack = () => {
     navigate(`/members/${params_id}`);
@@ -77,35 +78,60 @@ const AddMemberPage = ({ type }) => {
     );
   };
 
+  const handleSetStep = (i) => {
+    setStep(i);
+  };
+
+  const handleDisabled = (num, action) => {
+    let arr = [...stepDisabled];
+    for (let n of num) {
+      if (action === "add") {
+        if (!arr.includes(n)) {
+          arr.push(n);
+        }
+      } else {
+        arr = arr.filter((elm) => elm !== n);
+      }
+    }
+    setStepDisabled(arr);
+  };
+
   const renderedStep = () => {
     switch (step) {
       case 1:
         return (
           <Step1
-            onNext={(step) => setStep(step)}
+            onNext={handleSetStep}
             onShowError={handleShowError}
+            onDisabled={handleDisabled}
           />
         );
       case 2:
-        return <Step2 />;
+        return (
+          <Step2
+            onNext={handleSetStep}
+            onShowError={handleShowError}
+            onDisabled={handleDisabled}
+          />
+        );
       case 3:
-        return <Step3 />;
+        return <Step3 onNext={handleSetStep} onShowError={handleShowError} />;
       case 4:
-        return <Step4 />;
+        return <Step4 onNext={handleSetStep} onShowError={handleShowError} />;
       case 5:
-        return <Step5 />;
+        return <Step5 onNext={handleSetStep} onShowError={handleShowError} />;
       case 6:
-        return <Step6 />;
+        return <Step6 onNext={handleSetStep} onShowError={handleShowError} />;
       case 7:
-        return <Step7 />;
+        return <Step7 onNext={handleSetStep} onShowError={handleShowError} />;
       case 8:
-        return <Step8 />;
+        return <Step8 onNext={handleSetStep} onShowError={handleShowError} />;
       case 9:
-        return <Step9 />;
+        return <Step9 onNext={handleSetStep} onShowError={handleShowError} />;
       case 10:
-        return <Step10 />;
+        return <Step10 onNext={handleSetStep} onShowError={handleShowError} />;
       case 11:
-        return <Step11 />;
+        return <Step11 onNext={handleSetStep} onShowError={handleShowError} />;
       default:
         break;
     }
@@ -136,7 +162,8 @@ const AddMemberPage = ({ type }) => {
       <FormProgress
         total={11}
         current={step}
-        onProgressClick={(i) => setStep(i)}
+        onProgressClick={handleSetStep}
+        stepDisabled={stepDisabled}
       />
       {errors && renderedErrors()}
       <Card className="form-container mt-5">{renderedStep()}</Card>
