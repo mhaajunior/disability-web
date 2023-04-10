@@ -24,7 +24,7 @@ import { useDispatch } from "react-redux";
 import { clearStepMemberData } from "../store";
 
 const AddMemberPage = ({ type }) => {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(2);
   const [errors, setErrors] = useState(null);
   const [stepDisabled, setStepDisabled] = useState([]);
   const { household_id: params_id } = useParams();

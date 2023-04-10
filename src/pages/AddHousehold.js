@@ -82,6 +82,7 @@ const AddHousehold = ({ type }) => {
   const inputs = [
     {
       id: 1,
+      type: "dropdown",
       label: "ภาค",
       name: "reg",
       options: regions,
@@ -89,6 +90,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 2,
+      type: "dropdown",
       label: "จังหวัด",
       name: "cwt",
       options: filterdProvinces,
@@ -96,6 +98,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 3,
+      type: "dropdown",
       label: "อำเภอ/เขต",
       name: "amp",
       options: filterdDistricts,
@@ -103,6 +106,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 4,
+      type: "dropdown",
       label: "ตำบล/แขวง",
       name: "tmb",
       options: subDistricts,
@@ -110,6 +114,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 5,
+      type: "dropdown",
       label: "เขตการปกตรอง",
       name: "area",
       options: protectionArea,
@@ -117,6 +122,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 6,
+      type: "input",
       label: "เขตแจงนับ",
       name: "ea",
       options: subDistricts,
@@ -124,6 +130,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 7,
+      type: "input",
       label: "หมู่ที่/หมู่บ้าน",
       name: "vil",
       options: subDistricts,
@@ -131,6 +138,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 8,
+      type: "input",
       label: "ลำดับที่ EA ตัวอย่าง",
       name: "psu_no",
       options: subDistricts,
@@ -138,6 +146,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 9,
+      type: "dropdown",
       label: "ชุด EA ตัวอย่าง",
       name: "ea_set",
       options: eaSet,
@@ -145,6 +154,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 10,
+      type: "dropdown",
       label: "เดือนที่สำรวจ",
       name: "month",
       options: month,
@@ -152,6 +162,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 11,
+      type: "dropdown",
       label: "ปีที่สำรวจ",
       name: "yr",
       options: year,
@@ -159,6 +170,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 12,
+      type: "dropdown",
       label: "ลำดับที่ครัวเรือนส่วนบุคคลตัวอย่าง",
       name: "hh_no",
       options: hhNo,
@@ -166,6 +178,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 13,
+      type: "dropdown",
       label: "กลุ่มครัวเรือนตัวอย่างขั้นนับจด",
       name: "list_gr",
       options: listGr,
@@ -173,6 +186,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 14,
+      type: "dropdown",
       label: "กลุ่มครัวเรือนตัวอย่างขั้นแจงนับ",
       name: "enum_gr",
       options: enumGr,
@@ -180,6 +194,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 15,
+      type: "dropdown",
       label: "จำนวนสมาชิกในครัวเรือนขั้นแจงนับ",
       name: "members",
       options: members,
@@ -187,6 +202,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 16,
+      type: "dropdown",
       label: "จำนวนสมาชิกในครัวเรือนขั้นนับจด",
       name: "listing",
       options: listing,
@@ -194,6 +210,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 17,
+      type: "dropdown",
       label: "จำนวนสมาชิกที่พิการในครัวเรือน ขั้นแจงนับ",
       name: "mem_dis",
       options: memDis,
@@ -201,6 +218,7 @@ const AddHousehold = ({ type }) => {
     },
     {
       id: 18,
+      type: "dropdown",
       label: "ผลการแจงนับครัวเรือนตัวอย่าง",
       name: "enum",
       options: _enum,
@@ -275,8 +293,8 @@ const AddHousehold = ({ type }) => {
             return (
               <InputGroup
                 key={input.id}
-                type="dropdown"
                 label={input.label}
+                type={input.type}
                 options={input.options}
                 name={input.name}
                 value={data[input.name]}

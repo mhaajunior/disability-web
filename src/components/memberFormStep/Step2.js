@@ -14,13 +14,14 @@ const Step2 = ({ onNext, onShowError, onDisabled }) => {
   });
 
   const renderField = () => {
-    if (step1["f6"]) {
-      let num = parseInt(step1["f6"]);
-      if (num >= 5 && num <= 30) {
-        return true;
-      }
-    }
-    return false;
+    // if (step1["f6"]) {
+    //   let num = parseInt(step1["f6"]);
+    //   if (num >= 5 && num <= 30) {
+    //     return true;
+    //   }
+    // }
+    // return false;
+    return true;
   };
 
   const checkInputError = (name) => {
