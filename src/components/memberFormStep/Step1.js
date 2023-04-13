@@ -1,19 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { changeMember } from "../../store";
 import Button from "../Button";
-import {
-  f1,
-  f2,
-  f4,
-  f5,
-  f6,
-  f7,
-  f8,
-  f9,
-} from "../../assets/memberResource/step1";
 import { useState } from "react";
 import $ from "jquery";
 import InputGroup from "../inputGroup/InputGroup";
+import useMemberParams from "../../hooks/use-member-params";
 
 const Step1 = ({ onNext, onShowError, onDisabled }) => {
   const [formErrors, setFormErrors] = useState({});
@@ -21,6 +12,7 @@ const Step1 = ({ onNext, onShowError, onDisabled }) => {
   const step1 = useSelector((state) => {
     return state.memberForm.data.step1;
   });
+  const { f1, f2, f4, f5, f6, f7, f8, f9 } = useMemberParams();
 
   const renderF9 = () => {
     if (step1["f6"]) {
@@ -50,13 +42,19 @@ const Step1 = ({ onNext, onShowError, onDisabled }) => {
         dispatch(changeMember({ name: "f9", value: "", step: "step1" }));
       }
 
-      if (parseInt(step1["f6"]) >= 5) {
+      const intF6 = parseInt(step1["f6"]);
+      if (intF6 >= 5) {
         onDisabled([2], "remove");
         onNext(2);
       } else {
-        if (parseInt(step1["f6"]) < 15) {
-          onDisabled([2, 3], "add");
-          onNext(4);
+        if (intF6 < 15) {
+          if (intF6 < 2) {
+            onDisabled([2, 3, 4, 5, 6, 7], "add");
+            onNext(8);
+          } else {
+            onDisabled([2, 3], "add");
+            onNext(4);
+          }
         } else {
           onDisabled([2], "add");
           onNext(3);

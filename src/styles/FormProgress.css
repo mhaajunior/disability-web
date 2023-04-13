@@ -1,4 +1,4 @@
-.progress-circle {
+.progress-group .progress-circle {
   border: 3px solid var(--gray);
   border-radius: 50%;
   width: 60px;
@@ -7,10 +7,21 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  margin: 0 20px;
 }
 
-.progress-line {
-  border-top: 3px solid var(--gray);
+.progress-group:first-child .progress-circle {
+  margin-left: 0;
+  margin-right: 20px;
+}
+
+.progress-group:last-child .progress-circle {
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+.progress-group .progress-line {
+  border-top: 3px dotted var(--gray);
   width: 100px;
 }
 

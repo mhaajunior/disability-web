@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { changeMember } from "../../store";
 import Button from "../Button";
-import { f11, f12, f13 } from "../../assets/memberResource/step2";
 import { useState } from "react";
 import $ from "jquery";
 import InputGroup from "../inputGroup/InputGroup";
+import useMemberParams from "../../hooks/use-member-params";
 
 const Step2 = ({ onNext, onShowError, onDisabled }) => {
   const [formErrors, setFormErrors] = useState({});
@@ -12,6 +12,7 @@ const Step2 = ({ onNext, onShowError, onDisabled }) => {
   const { step1, step2 } = useSelector((state) => {
     return state.memberForm.data;
   });
+  const { f11, f12, f13 } = useMemberParams();
 
   const renderField = () => {
     // if (step1["f6"]) {

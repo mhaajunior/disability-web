@@ -3,7 +3,7 @@ import { useState } from "react";
 import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
-import "./Card.css";
+import "../styles/Card.css";
 
 const Card = ({
   children,

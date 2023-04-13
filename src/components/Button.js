@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import "./Button.css";
+import "../styles/Button.css";
 
 const Button = ({
   children,

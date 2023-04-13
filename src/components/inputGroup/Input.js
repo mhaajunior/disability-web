@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import "./Input.css";
+import "../../styles/Input.css";
 
 const Input = ({ label, name, value, dispatchFn }) => {
   const dispatch = useDispatch();

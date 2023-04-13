@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
 import $ from "jquery";
-import "./Dropdown.css";
+import "../../styles/Dropdown.css";
 
 const Dropdown = ({ label, options, name, value, dispatchFn }) => {
   const [isOpen, setIsOpen] = useState(false);

@@ -12,7 +12,7 @@
       "ea_set": "01",
       "month": "11",
       "yr": "66",
-      "hh_no": "002",
+      "hh_no": "003",
       "list_gr": "2",
       "enum_gr": "2",
       "members": "02",
@@ -61,32 +61,10 @@
       "enum_gr": "2",
       "members": "02",
       "listing": "01",
-      "mem_dis": "02",
+      "mem_dis": "01",
       "enum": "12",
       "status": "warning",
       "id": 8
-    },
-    {
-      "reg": "1",
-      "cwt": "10",
-      "amp": "01",
-      "tmb": "01",
-      "area": "1",
-      "ea": "01",
-      "vil": "01",
-      "psu_no": "01",
-      "ea_set": "01",
-      "month": "10",
-      "yr": "66",
-      "hh_no": "001",
-      "list_gr": "1",
-      "enum_gr": "1",
-      "members": "01",
-      "listing": "00",
-      "mem_dis": "03",
-      "enum": "11",
-      "status": "warning",
-      "id": 9
     }
   ]
 }

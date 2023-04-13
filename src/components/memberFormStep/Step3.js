@@ -1,16 +1,17 @@
 import { useSelector } from "react-redux";
 import { changeMember } from "../../store";
 import Button from "../Button";
-import { f17, f19 } from "../../assets/memberResource/step3";
 import { useState } from "react";
 import $ from "jquery";
 import InputGroup from "../inputGroup/InputGroup";
+import useMemberParams from "../../hooks/use-member-params";
 
 const Step3 = ({ onNext, onShowError }) => {
   const [formErrors, setFormErrors] = useState({});
   const step3 = useSelector((state) => {
     return state.memberForm.data.step2;
   });
+  const { f17, f19 } = useMemberParams();
 
   const checkInputError = (name) => {
     for (const key in formErrors) {

@@ -9,23 +9,6 @@ import { BiErrorCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import $ from "jquery";
 import {
-  regions,
-  provinces,
-  districts,
-  subDistricts,
-  protectionArea,
-  eaSet,
-  month,
-  year,
-  hhNo,
-  listGr,
-  enumGr,
-  members,
-  listing,
-  memDis,
-  _enum,
-} from "../assets/householdResource";
-import {
   changeHousehold,
   clearHouseholdData,
   updateAllHouseholdData,
@@ -34,6 +17,7 @@ import {
 } from "../store";
 import axios from "axios";
 import InputGroup from "../components/inputGroup/InputGroup";
+import useHouseholdParams from "../hooks/use-household-params";
 
 const AddHousehold = ({ type }) => {
   const [formErrors, setFormErrors] = useState([]);
@@ -45,13 +29,33 @@ const AddHousehold = ({ type }) => {
   const { data, status } = useSelector((state) => {
     return state.householdForm;
   });
+  const {
+    regions,
+    provinces,
+    districts,
+    subDistricts,
+    protectionArea,
+    eaSet,
+    month,
+    year,
+    hhNo,
+    listGr,
+    enumGr,
+    members,
+    listing,
+    memDis,
+    _enum,
+  } = useHouseholdParams();
 
   useEffect(() => {
     $("html,body").scrollTop(0);
     const fetchData = async () => {
-      const { data } = await axios.get("http://localhost:3005/households", {
-        params: { id },
-      });
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_BACK_END_URL}/households`,
+        {
+          params: { id },
+        }
+      );
       dispatch(updateAllHouseholdData(data));
     };
 
