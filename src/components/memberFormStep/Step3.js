@@ -6,7 +6,9 @@ import $ from "jquery";
 import InputGroup from "../inputGroup/InputGroup";
 import useMemberParams from "../../hooks/use-member-params";
 
-const Step3 = ({ onNext, onShowError }) => {
+const Step3 = ({
+  data: { clear, onNext, onShowError, onDisabled, onClear },
+}) => {
   const [formErrors, setFormErrors] = useState({});
   const step3 = useSelector((state) => {
     return state.memberForm.data.step2;
@@ -14,6 +16,10 @@ const Step3 = ({ onNext, onShowError }) => {
   const { f17, f19 } = useMemberParams();
 
   const checkInputError = (name) => {
+    if (clear) {
+      return true;
+    }
+
     for (const key in formErrors) {
       const found = formErrors[key].fields.find((elm) => elm === name);
       if (found) {
@@ -26,6 +32,7 @@ const Step3 = ({ onNext, onShowError }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    onClear();
     if (validate(step3)) {
       onNext(4);
     } else {

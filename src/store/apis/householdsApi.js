@@ -1,4 +1,3 @@
-import { nanoid } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const householdsApi = createApi({
@@ -11,8 +10,8 @@ const householdsApi = createApi({
       fetchHouseholds: builder.query({
         providesTags: (result) => {
           if (result) {
-            const tags = result.map((household) => {
-              return { type: "Household", id: household.id };
+            const tags = result.households.map((household) => {
+              return { type: "Household", id: household._id };
             });
             tags.push({ type: "UsersHouseHolds" });
             return tags;
@@ -34,49 +33,15 @@ const householdsApi = createApi({
           return [{ type: "UsersHouseHolds" }];
         },
         query: (obj) => {
-          const {
-            reg,
-            cwt,
-            amp,
-            tmb,
-            area,
-            ea,
-            vil,
-            psu_no,
-            ea_set,
-            month,
-            yr,
-            hh_no,
-            list_gr,
-            enum_gr,
-            members,
-            listing,
-            mem_dis,
-          } = obj.data;
           return {
             url: "/households",
             method: "POST",
             body: {
-              id: nanoid,
-              reg,
-              cwt,
-              amp,
-              tmb,
-              area,
-              ea,
-              vil,
-              psu_no,
-              ea_set,
-              month,
-              yr,
-              hh_no,
-              list_gr,
-              enum_gr,
-              members,
-              listing,
-              mem_dis,
-              enum: obj.data.enum,
+              data: obj.data,
               status: obj.status,
+            },
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
             },
           };
         },

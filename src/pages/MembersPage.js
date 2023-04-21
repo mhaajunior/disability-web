@@ -61,10 +61,10 @@ const MembersPage = () => {
     );
   } else if (error) {
     content = <div className="text-red-600">เกิดข้อผิดพลาดในการแสดงข้อมูล</div>;
-  } else if (data.length === 0) {
+  } else if (data.households.length === 0) {
     content = <div>ไม่มีสมาชิกที่จะแสดง</div>;
   } else {
-    content = data.map((household) => {
+    content = data.households.map((household) => {
       let { status } = household;
       let success,
         warning,

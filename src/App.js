@@ -3,6 +3,7 @@ import HouseholdPage from "./pages/HouseholdPage";
 import AddHousehold from "./pages/AddHousehold";
 import MembersPage from "./pages/MembersPage";
 import AddMemberPage from "./pages/AddMemberPage";
+import PageNotFound from "./pages/PageNotFound";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           element={<AddMemberPage type="add" />}
         />
         <Route path="/" element={<HouseholdPage />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { householdsApi } from "../apis/householdsApi";
 import toastr from "../../assets/toastr.config";
+import Swal from "sweetalert2";
 
 const householdSlice = createSlice({
   name: "householdForm",
@@ -47,7 +48,7 @@ const householdSlice = createSlice({
     },
     updateAllHouseholdData(state, action) {
       Object.keys(state.data).forEach(
-        (index) => (state.data[index] = action.payload[0][index])
+        (index) => (state.data[index] = action.payload[index])
       );
     },
   },
@@ -57,6 +58,12 @@ const householdSlice = createSlice({
       (state) => {
         toastr["success"]("ทำการเพิ่มครัวเรือนสำเร็จ");
         Object.keys(state.data).forEach((index) => (state.data[index] = ""));
+      }
+    );
+    builder.addMatcher(
+      householdsApi.endpoints.addHousehold.matchRejected,
+      () => {
+        Swal.fire("เกิดข้อผิดพลาด", "กรุณาลองใหม่อีกครั้งในภายหลัง", "error");
       }
     );
     builder.addMatcher(

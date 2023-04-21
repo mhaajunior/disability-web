@@ -21,6 +21,7 @@ import useHouseholdParams from "../hooks/use-household-params";
 
 const AddHousehold = ({ type }) => {
   const [formErrors, setFormErrors] = useState([]);
+  const [clear, setClear] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -56,7 +57,7 @@ const AddHousehold = ({ type }) => {
           params: { id },
         }
       );
-      dispatch(updateAllHouseholdData(data));
+      dispatch(updateAllHouseholdData(data.household));
     };
 
     if (type === "edit") {
@@ -75,6 +76,10 @@ const AddHousehold = ({ type }) => {
   );
 
   const checkInputError = (name) => {
+    if (clear) {
+      return true;
+    }
+
     const found = formErrors.find((elm) => elm === name);
     if (found) {
       return false;
@@ -90,7 +95,6 @@ const AddHousehold = ({ type }) => {
       label: "ภาค",
       name: "reg",
       options: regions,
-      isValid: checkInputError("reg"),
     },
     {
       id: 2,
@@ -98,7 +102,6 @@ const AddHousehold = ({ type }) => {
       label: "จังหวัด",
       name: "cwt",
       options: filterdProvinces,
-      isValid: checkInputError("cwt"),
     },
     {
       id: 3,
@@ -106,7 +109,6 @@ const AddHousehold = ({ type }) => {
       label: "อำเภอ/เขต",
       name: "amp",
       options: filterdDistricts,
-      isValid: checkInputError("amp"),
     },
     {
       id: 4,
@@ -114,7 +116,6 @@ const AddHousehold = ({ type }) => {
       label: "ตำบล/แขวง",
       name: "tmb",
       options: subDistricts,
-      isValid: checkInputError("tmb"),
     },
     {
       id: 5,
@@ -122,7 +123,6 @@ const AddHousehold = ({ type }) => {
       label: "เขตการปกตรอง",
       name: "area",
       options: protectionArea,
-      isValid: checkInputError("area"),
     },
     {
       id: 6,
@@ -130,7 +130,6 @@ const AddHousehold = ({ type }) => {
       label: "เขตแจงนับ",
       name: "ea",
       options: subDistricts,
-      isValid: checkInputError("ea"),
     },
     {
       id: 7,
@@ -138,7 +137,6 @@ const AddHousehold = ({ type }) => {
       label: "หมู่ที่/หมู่บ้าน",
       name: "vil",
       options: subDistricts,
-      isValid: checkInputError("vil"),
     },
     {
       id: 8,
@@ -146,7 +144,6 @@ const AddHousehold = ({ type }) => {
       label: "ลำดับที่ EA ตัวอย่าง",
       name: "psu_no",
       options: subDistricts,
-      isValid: checkInputError("psu_no"),
     },
     {
       id: 9,
@@ -154,7 +151,6 @@ const AddHousehold = ({ type }) => {
       label: "ชุด EA ตัวอย่าง",
       name: "ea_set",
       options: eaSet,
-      isValid: checkInputError("ea_set"),
     },
     {
       id: 10,
@@ -162,7 +158,6 @@ const AddHousehold = ({ type }) => {
       label: "เดือนที่สำรวจ",
       name: "month",
       options: month,
-      isValid: checkInputError("month"),
     },
     {
       id: 11,
@@ -170,7 +165,6 @@ const AddHousehold = ({ type }) => {
       label: "ปีที่สำรวจ",
       name: "yr",
       options: year,
-      isValid: checkInputError("yr"),
     },
     {
       id: 12,
@@ -178,7 +172,6 @@ const AddHousehold = ({ type }) => {
       label: "ลำดับที่ครัวเรือนส่วนบุคคลตัวอย่าง",
       name: "hh_no",
       options: hhNo,
-      isValid: checkInputError("hh_no"),
     },
     {
       id: 13,
@@ -186,7 +179,6 @@ const AddHousehold = ({ type }) => {
       label: "กลุ่มครัวเรือนตัวอย่างขั้นนับจด",
       name: "list_gr",
       options: listGr,
-      isValid: checkInputError("list_gr"),
     },
     {
       id: 14,
@@ -194,7 +186,6 @@ const AddHousehold = ({ type }) => {
       label: "กลุ่มครัวเรือนตัวอย่างขั้นแจงนับ",
       name: "enum_gr",
       options: enumGr,
-      isValid: checkInputError("enum_gr"),
     },
     {
       id: 15,
@@ -202,7 +193,6 @@ const AddHousehold = ({ type }) => {
       label: "จำนวนสมาชิกในครัวเรือนขั้นแจงนับ",
       name: "members",
       options: members,
-      isValid: checkInputError("members"),
     },
     {
       id: 16,
@@ -210,7 +200,6 @@ const AddHousehold = ({ type }) => {
       label: "จำนวนสมาชิกในครัวเรือนขั้นนับจด",
       name: "listing",
       options: listing,
-      isValid: checkInputError("listing"),
     },
     {
       id: 17,
@@ -218,7 +207,6 @@ const AddHousehold = ({ type }) => {
       label: "จำนวนสมาชิกที่พิการในครัวเรือน ขั้นแจงนับ",
       name: "mem_dis",
       options: memDis,
-      isValid: checkInputError("mem_dis"),
     },
     {
       id: 18,
@@ -226,12 +214,12 @@ const AddHousehold = ({ type }) => {
       label: "ผลการแจงนับครัวเรือนตัวอย่าง",
       name: "enum",
       options: _enum,
-      isValid: checkInputError("enum"),
     },
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setClear(false);
     if (validate(data)) {
       if (type === "add") {
         addHousehold({ data, status });
@@ -268,6 +256,8 @@ const AddHousehold = ({ type }) => {
 
   const clearData = () => {
     dispatch(clearHouseholdData());
+    setClear(true);
+    setFormErrors([]);
   };
 
   return (
@@ -302,7 +292,7 @@ const AddHousehold = ({ type }) => {
                 options={input.options}
                 name={input.name}
                 value={data[input.name]}
-                isValid={input.isValid}
+                isValid={checkInputError(input.name)}
                 dispatchFn={(name, value) => changeHousehold({ name, value })}
               />
             );

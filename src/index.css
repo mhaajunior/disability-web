@@ -21,3 +21,7 @@ body {
 .txt-primary {
   color: var(--primary);
 }
+
+.swal2-html-container {
+  line-height: 2 !important;
+}

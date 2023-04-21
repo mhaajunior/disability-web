@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { BiErrorCircle } from "react-icons/bi";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import FormProgress from "../components/FormProgress";
@@ -21,12 +22,13 @@ import {
 } from "../components/memberFormStep";
 import $ from "jquery";
 import { useDispatch } from "react-redux";
-import { clearStepMemberData } from "../store";
+import { clearStepMemberData, clearAllMemberData } from "../store";
 
 const AddMemberPage = ({ type }) => {
   const [step, setStep] = useState(2);
   const [errors, setErrors] = useState(null);
   const [stepDisabled, setStepDisabled] = useState([]);
+  const [clear, setClear] = useState(null);
   const { household_id: params_id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -42,10 +44,29 @@ const AddMemberPage = ({ type }) => {
 
   const clearStepData = () => {
     dispatch(clearStepMemberData(`step${step}`));
+    setClear(true);
     setErrors(null);
   };
 
-  const clearAllData = () => {};
+  const clearAllData = () => {
+    Swal.fire({
+      title: "คำเตือน!",
+      text: "ข้อมูลของสมาชิกที่คุณกรอกตั้งแต่ขั้นตอนแรกจะถูกล้างทั้งหมด",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ต้องการล้าง",
+      cancelButtonText: "ไม่ต้องการล้าง",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(clearAllMemberData());
+        setClear(true);
+        setErrors(null);
+        setStep(1);
+      }
+    });
+  };
 
   const handleShowError = (errorObj) => {
     const errArr = [];
@@ -96,42 +117,38 @@ const AddMemberPage = ({ type }) => {
     setStepDisabled(arr);
   };
 
+  const data = {
+    clear,
+    onNext: handleSetStep,
+    onShowError: handleShowError,
+    onDisabled: handleDisabled,
+    onClear: () => setClear(false),
+  };
+
   const renderedStep = () => {
     switch (step) {
       case 1:
-        return (
-          <Step1
-            onNext={handleSetStep}
-            onShowError={handleShowError}
-            onDisabled={handleDisabled}
-          />
-        );
+        return <Step1 data={data} />;
       case 2:
-        return (
-          <Step2
-            onNext={handleSetStep}
-            onShowError={handleShowError}
-            onDisabled={handleDisabled}
-          />
-        );
+        return <Step2 data={data} />;
       case 3:
-        return <Step3 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step3 data={data} />;
       case 4:
-        return <Step4 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step4 data={data} />;
       case 5:
-        return <Step5 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step5 data={data} />;
       case 6:
-        return <Step6 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step6 data={data} />;
       case 7:
-        return <Step7 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step7 data={data} />;
       case 8:
-        return <Step8 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step8 data={data} />;
       case 9:
-        return <Step9 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step9 data={data} />;
       case 10:
-        return <Step10 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step10 data={data} />;
       case 11:
-        return <Step11 onNext={handleSetStep} onShowError={handleShowError} />;
+        return <Step11 data={data} />;
       default:
         break;
     }

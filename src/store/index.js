@@ -12,6 +12,7 @@ import {
   memberReducer,
   changeMember,
   clearStepMemberData,
+  clearAllMemberData,
 } from "./slices/memberSlice";
 
 const store = configureStore({
@@ -37,6 +38,7 @@ export {
   updateAllHouseholdData,
   changeMember,
   clearStepMemberData,
+  clearAllMemberData,
 };
 export { useGetProvinceQuery } from "./apis/provincesApi";
 export {

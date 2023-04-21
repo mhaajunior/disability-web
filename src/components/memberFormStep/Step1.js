@@ -6,7 +6,9 @@ import $ from "jquery";
 import InputGroup from "../inputGroup/InputGroup";
 import useMemberParams from "../../hooks/use-member-params";
 
-const Step1 = ({ onNext, onShowError, onDisabled }) => {
+const Step1 = ({
+  data: { clear, onNext, onShowError, onDisabled, onClear },
+}) => {
   const [formErrors, setFormErrors] = useState({});
   const dispatch = useDispatch();
   const step1 = useSelector((state) => {
@@ -25,6 +27,10 @@ const Step1 = ({ onNext, onShowError, onDisabled }) => {
   };
 
   const checkInputError = (name) => {
+    if (clear) {
+      return true;
+    }
+
     for (const key in formErrors) {
       const found = formErrors[key].fields.find((elm) => elm === name);
       if (found) {
@@ -37,6 +43,7 @@ const Step1 = ({ onNext, onShowError, onDisabled }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    onClear();
     if (validate(step1)) {
       if (!renderF9()) {
         dispatch(changeMember({ name: "f9", value: "", step: "step1" }));
@@ -95,6 +102,12 @@ const Step1 = ({ onNext, onShowError, onDisabled }) => {
           errors[1].fields.push(key);
         }
       }
+    }
+
+    if (errors[1].fields.length > 0) {
+      setFormErrors(errors);
+      onShowError(errors);
+      return false;
     }
 
     if (

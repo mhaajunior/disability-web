@@ -160,8 +160,16 @@ const memberSlice = createSlice({
         (index) => (state.data[step][index] = "")
       );
     },
+    clearAllMemberData(state) {
+      Object.keys(state.data).forEach((index1) =>
+        Object.keys(state.data[index1]).forEach(
+          (index2) => (state.data[index1][index2] = "")
+        )
+      );
+    },
   },
 });
 
-export const { changeMember, clearStepMemberData } = memberSlice.actions;
+export const { changeMember, clearStepMemberData, clearAllMemberData } =
+  memberSlice.actions;
 export const memberReducer = memberSlice.reducer;

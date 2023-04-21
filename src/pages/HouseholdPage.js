@@ -52,7 +52,7 @@ const HouseholdPage = () => {
   } else if (data.length === 0) {
     content = <div>ไม่มีรายการครัวเรือนที่จะแสดง</div>;
   } else {
-    content = data.map((household) => {
+    content = data.households.map((household) => {
       let { status } = household;
       let success,
         warning,
@@ -87,8 +87,8 @@ const HouseholdPage = () => {
 
       return (
         <Card
-          key={household.id}
-          id={household.id}
+          key={household._id}
+          id={household._id}
           success={success}
           warning={warning}
           error={error}
@@ -96,14 +96,14 @@ const HouseholdPage = () => {
           hoverWord="กดเพื่อดูสมาชิกในครัวเรือน"
           onDelete={handleDelete}
           onEdit={handleEdit}
-          path={`/members/${household.id}`}
+          path={`/members/${household._id}`}
           className="relative"
         >
           {pic}
           <div className="flex flex-col leading-10">
             {" "}
             <p>
-              <span className="font-bold">รหัสครัวเรือน:</span> #{household.id}
+              <span className="font-bold">รหัสครัวเรือน:</span> #{household._id}
             </p>
             <p>
               <span className="font-bold">จำนวนสมาชิกในครัวเรือน:</span> -

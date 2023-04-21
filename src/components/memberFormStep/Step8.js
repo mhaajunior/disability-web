@@ -6,7 +6,9 @@ import $ from "jquery";
 import InputGroup from "../inputGroup/InputGroup";
 import useMemberParams from "../../hooks/use-member-params";
 
-const Step8 = ({ onNext, onShowError }) => {
+const Step8 = ({
+  data: { clear, onNext, onShowError, onDisabled, onClear },
+}) => {
   const [formErrors, setFormErrors] = useState({});
   const step2 = useSelector((state) => {
     return state.memberForm.data.step2;
