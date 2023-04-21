@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { householdsApi } from "./apis/householdsApi";
-import { provincesApi } from "./apis/provincesApi";
+import { disablesApi } from "./apis/disablesApi";
 import {
   householdReducer,
   changeHousehold,
@@ -19,13 +18,10 @@ const store = configureStore({
   reducer: {
     householdForm: householdReducer,
     memberForm: memberReducer,
-    [provincesApi.reducerPath]: provincesApi.reducer,
-    [householdsApi.reducerPath]: householdsApi.reducer,
+    [disablesApi.reducerPath]: disablesApi.reducer,
   },
   middleware: (getDefaultMiddleware) => {
-    return getDefaultMiddleware()
-      .concat(provincesApi.middleware)
-      .concat(householdsApi.middleware);
+    return getDefaultMiddleware().concat(disablesApi.middleware);
   },
 });
 
@@ -40,10 +36,4 @@ export {
   clearStepMemberData,
   clearAllMemberData,
 };
-export { useGetProvinceQuery } from "./apis/provincesApi";
-export {
-  useFetchHouseholdsQuery,
-  useAddHouseholdMutation,
-  useEditHouseholdMutation,
-  useDeleteHouseholdMutation,
-} from "./apis/householdsApi";
+export { useImportDisablesMutation } from "./apis/disablesApi";
