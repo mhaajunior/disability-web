@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { disablesApi } from "../apis/disablesApi";
+import toastr from "../../helpers/toastr.config";
+import Swal from "sweetalert2";
 
 const memberSlice = createSlice({
   name: "memberForm",
@@ -167,6 +170,21 @@ const memberSlice = createSlice({
         )
       );
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      disablesApi.endpoints.importDisable.matchFulfilled,
+      () => {
+        toastr.options.onclick = () => (window.location.href = "/consistency");
+        toastr["success"]("ทำการนำเข้าข้อมูลสำเร็จ");
+      }
+    );
+    builder.addMatcher(
+      disablesApi.endpoints.importDisable.matchRejected,
+      () => {
+        Swal.fire("เกิดข้อผิดพลาด", "กรุณาลองใหม่อีกครั้งในภายหลัง", "error");
+      }
+    );
   },
 });
 

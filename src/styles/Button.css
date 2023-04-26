@@ -1,11 +1,5 @@
-.btn-grad {
-  background-image: linear-gradient(
-    to right,
-    #02aab0 0%,
-    #00cdac 51%,
-    #02aab0 100%
-  );
-  margin: 10px;
+.btn {
+  margin: 10px 0;
   padding: 15px 45px;
   text-align: center;
   text-transform: uppercase;
@@ -17,10 +11,19 @@
   display: block;
 }
 
-.btn-grad:hover {
+.btn:hover {
   background-position: right center; /* change the direction of the change here */
   color: #fff;
   text-decoration: none;
+}
+
+.btn-grad {
+  background-image: linear-gradient(
+    to right,
+    #02aab0 0%,
+    #00cdac 51%,
+    #02aab0 100%
+  );
 }
 
 .btn-danger {
@@ -30,21 +33,6 @@
     #ea384d 51%,
     #d31027 100%
   );
-  margin: 10px;
-  padding: 15px 45px;
-  text-align: center;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;
-  border-radius: 10px;
-  display: block;
-}
-
-.btn-danger:hover {
-  background-position: right center; /* change the direction of the change here */
-  color: #fff;
-  text-decoration: none;
 }
 
 .btn-warning {
@@ -54,21 +42,6 @@
     #ffc837 51%,
     #ff8008 100%
   );
-  margin: 10px;
-  padding: 15px 45px;
-  text-align: center;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;
-  border-radius: 10px;
-  display: block;
-}
-
-.btn-warning:hover {
-  background-position: right center; /* change the direction of the change here */
-  color: #fff;
-  text-decoration: none;
 }
 
 .btn-blue {
@@ -78,20 +51,4 @@
     #12d8fa 51%,
     #1fa2ff 100%
   );
-  margin: 10px;
-  padding: 15px 45px;
-  text-align: center;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;
-  box-shadow: 0 0 20px #eee;
-  border-radius: 10px;
-  display: block;
-}
-
-.btn-blue:hover {
-  background-position: right center; /* change the direction of the change here */
-  color: #fff;
-  text-decoration: none;
 }

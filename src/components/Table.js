@@ -1,33 +1,19 @@
-import { useEffect, useState } from "react";
-
-const Table = ({ data, head }) => {
-  const [titles, setTitles] = useState([]);
-  const [contentRows, setContentRows] = useState([]);
-
-  useEffect(() => {
-    const arr = [];
-    for (let i = 0; i < data.length; i++) {
-      if (i === 0) {
-        setTitles(data[i].split(","));
-      } else {
-        arr.push(data[i].split(","));
-      }
-    }
-    setContentRows(arr);
-  }, [data]);
-
-  const isNull = (data) => {
-    const content = JSON.parse(data);
-    if (content && content !== " ") {
-      return content;
-    } else {
-      return "-";
-    }
-  };
-
+const Table = ({
+  titles,
+  contents,
+  perPage = 10,
+  head,
+  totalRows,
+  checkFn,
+}) => {
   return (
     <>
-      <div className="mb-4 font-bold text-2xl">{head}</div>
+      <div className="flex justify-between items-center mb-4">
+        <div className="font-bold text-2xl">{head}</div>
+        <div>
+          แสดงข้อมูล {perPage} แถว จากทั้งหมด {totalRows - 1} แถว
+        </div>
+      </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -40,20 +26,25 @@ const Table = ({ data, head }) => {
                 );
               })}
             </tr>
-            {contentRows.map((row, index) => {
+          </thead>
+          <tbody>
+            {contents.map((row, index) => {
               return (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
                   {row.map((content, index) => {
                     return (
                       <td key={index} className="px-6 py-3">
-                        {isNull(content)}
+                        {checkFn ? checkFn(content) : content}
                       </td>
                     );
                   })}
                 </tr>
               );
             })}
-          </thead>
+          </tbody>
         </table>
       </div>
     </>

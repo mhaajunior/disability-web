@@ -30,12 +30,6 @@
   opacity: 0.7;
 }
 
-.ellipsis {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .error .label {
   color: red;
 }

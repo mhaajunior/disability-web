@@ -19,7 +19,7 @@ import axios from "axios";
 import InputGroup from "../components/inputGroup/InputGroup";
 import useHouseholdParams from "../hooks/use-household-params";
 
-const AddHousehold = ({ type }) => {
+const AddHouseholdPage = ({ type }) => {
   const [formErrors, setFormErrors] = useState([]);
   const [clear, setClear] = useState(null);
   const navigate = useNavigate();
@@ -309,4 +309,4 @@ const AddHousehold = ({ type }) => {
   );
 };
 
-export default AddHousehold;
+export default AddHouseholdPage;

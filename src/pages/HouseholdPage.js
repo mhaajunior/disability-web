@@ -1,6 +1,5 @@
 import { IoIosAddCircle } from "react-icons/io";
 import {
-  AiOutlineLoading3Quarters,
   AiOutlineWarning,
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
@@ -11,6 +10,7 @@ import Button from "../components/Button";
 import Card from "../components/Card";
 import Header from "../components/Header";
 import { useDeleteHouseholdMutation, useFetchHouseholdsQuery } from "../store";
+import Loading from "../components/Loading";
 
 const HouseholdPage = () => {
   const { data, error, isFetching } = useFetchHouseholdsQuery();
@@ -44,9 +44,7 @@ const HouseholdPage = () => {
 
   let content;
   if (isFetching || results.isLoading) {
-    content = (
-      <AiOutlineLoading3Quarters className="animate-spin text-7xl m-auto txt-primary" />
-    );
+    content = <Loading type="partial" />;
   } else if (error) {
     content = <div className="text-red-600">เกิดข้อผิดพลาดในการแสดงข้อมูล</div>;
   } else if (data.length === 0) {

@@ -12,13 +12,17 @@ const Button = ({
   loading,
   ...rest
 }) => {
-  const classes = classNames(rest.className, "flex items-center px-3 py-2", {
-    "btn-grad": primary,
-    "btn-blue": secondary,
-    "btn-danger": danger,
-    "btn-warning": warning,
-    "rounded-3xl": rounded,
-  });
+  const classes = classNames(
+    rest.className,
+    "flex ellipsis items-center px-3 py-2 btn",
+    {
+      "btn-grad": primary,
+      "btn-blue": secondary,
+      "btn-danger": danger,
+      "btn-warning": warning,
+      "rounded-3xl": rounded,
+    }
+  );
 
   return (
     <button {...rest} className={classes}>

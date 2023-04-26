@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { householdsApi } from "../apis/householdsApi";
-import toastr from "../../assets/toastr.config";
+import toastr from "../../helpers/toastr.config";
 import Swal from "sweetalert2";
 
 const householdSlice = createSlice({

@@ -7,7 +7,7 @@ const disablesApi = createApi({
   }),
   endpoints(builder) {
     return {
-      importDisables: builder.mutation({
+      importDisable: builder.mutation({
         invalidatesTags: () => {
           return [{ type: "UsersDisables" }];
         },
@@ -19,9 +19,42 @@ const disablesApi = createApi({
           };
         },
       }),
+      fetchDisables: builder.query({
+        providesTags: (result) => {
+          if (result) {
+            const tags = result.data.map((file) => {
+              return { type: "Disable", id: file._id };
+            });
+            tags.push({ type: "UsersDisables" });
+            return tags;
+          }
+          return [];
+        },
+        query: () => {
+          return {
+            url: "/disables",
+            method: "GET",
+          };
+        },
+      }),
+      deleteDisable: builder.mutation({
+        invalidatesTags: (result, error, id) => {
+          return [{ type: "Disable", id }];
+        },
+        query: (id) => {
+          return {
+            url: `/disables/${id}`,
+            method: "DELETE",
+          };
+        },
+      }),
     };
   },
 });
 
-export const { useImportDisablesMutation } = disablesApi;
+export const {
+  useImportDisableMutation,
+  useFetchDisablesQuery,
+  useDeleteDisableMutation,
+} = disablesApi;
 export { disablesApi };
