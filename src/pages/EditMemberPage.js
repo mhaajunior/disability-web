@@ -63,7 +63,7 @@ const EditMemberPage = () => {
     },
     {
       key: "step5",
-      name: "ตอนที่ 5 ความลำบากหรือปัญหาสุขภาพของเด็กอายุ 5 -17 ปี",
+      name: "ตอนที่ 5 ความลำบากหรือปัญหาสุขภาพของเด็กอายุ 5 - 17 ปี",
     },
     {
       key: "step6",
@@ -96,7 +96,6 @@ const EditMemberPage = () => {
 
   const saveMemberForm = () => {
     if (checkValidation()) {
-      console.log(memberForm);
       editMember({ id, memberForm });
     } else {
       $("html, body").animate({ scrollTop: 0 }, "fast");
