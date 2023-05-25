@@ -8,7 +8,7 @@ const InputGroup = ({
   options,
   name,
   value,
-  dispatchFn,
+  setterFn,
   isValid,
   isShow,
 }) => {
@@ -26,16 +26,11 @@ const InputGroup = ({
           options={options}
           name={name}
           value={value}
-          dispatchFn={dispatchFn}
+          setterFn={setterFn}
         />
       )}
       {type === "input" && (
-        <Input
-          label={label}
-          name={name}
-          value={value}
-          dispatchFn={dispatchFn}
-        />
+        <Input label={label} name={name} value={value} setterFn={setterFn} />
       )}
     </div>
   );

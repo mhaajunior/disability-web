@@ -51,12 +51,16 @@ const Card = ({
           </div>
           <div className="flex items-center z-20">
             <div>
-              <Button warning rounded onClick={() => onEdit(id)}>
-                <RiEditLine />
-              </Button>
-              <Button danger rounded onClick={() => onDelete(id)}>
-                <RiDeleteBin6Line />
-              </Button>
+              {onEdit && (
+                <Button warning rounded onClick={() => onEdit(id)}>
+                  <RiEditLine />
+                </Button>
+              )}
+              {onDelete && (
+                <Button danger rounded onClick={() => onDelete(id)}>
+                  <RiDeleteBin6Line />
+                </Button>
+              )}
             </div>
           </div>
         </>

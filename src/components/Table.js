@@ -1,3 +1,5 @@
+import { thousandSeparator } from "../helpers/common";
+
 const Table = ({
   titles,
   contents,
@@ -8,10 +10,11 @@ const Table = ({
 }) => {
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
+      <div className="md:flex justify-between items-center mb-4">
         <div className="font-bold text-2xl">{head}</div>
         <div>
-          แสดงข้อมูล {perPage} แถว จากทั้งหมด {totalRows - 1} แถว
+          แสดงข้อมูล {totalRows > perPage ? perPage : totalRows} แถว จากทั้งหมด{" "}
+          {thousandSeparator(totalRows)} แถว
         </div>
       </div>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

@@ -1,16 +1,14 @@
-import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
 import $ from "jquery";
 import "../../styles/Dropdown.css";
 
-const Dropdown = ({ label, options, name, value, dispatchFn }) => {
+const Dropdown = ({ label, options, name, value, setterFn }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const divEl = useRef();
   const textEl = useRef();
   const parentEl = useRef();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const handler = (e) => {
@@ -42,7 +40,7 @@ const Dropdown = ({ label, options, name, value, dispatchFn }) => {
   const handleOptionClick = (option, name) => {
     setIsOpen(false);
     setSelected(option.name);
-    dispatch(dispatchFn(name, option.id));
+    setterFn(option.id);
   };
 
   const renderedOptions = () => {
@@ -116,7 +114,7 @@ const Dropdown = ({ label, options, name, value, dispatchFn }) => {
           onMouseEnter={startMarquee}
           onMouseLeave={stopMarquee}
         >
-          {selected || <span className="text-gray-400">-- {label} --</span>}
+          {selected || <span className="text-gray-300">{label}</span>}
         </span>
         <div className="absolute right-2 h-full flex items-center bg-white">
           <GoChevronDown className="text-lg" />

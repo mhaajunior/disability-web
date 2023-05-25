@@ -18,22 +18,18 @@
   border: 1px solid var(--primary);
 }
 
-.card.purple {
-  background: linear-gradient(150deg, #f731db, #4600f1 100%);
-}
-
 .card.gray {
   background: linear-gradient(135deg, #e3e3e3 0%, #5d6874 100%);
 }
 
 .card.green {
-  background: linear-gradient(135deg, #70ebb8 0%, #e3e3e3 100%);
+  border-color: green;
 }
 
 .card.red {
-  background: linear-gradient(135deg, #f68579 0%, #e3e3e3 100%);
+  border-color: red;
 }
 
 .card.yellow {
-  background: linear-gradient(135deg, #efda50 0%, #e3e3e3 100%);
+  border-color: yellow;
 }

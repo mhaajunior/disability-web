@@ -55,9 +55,9 @@ const Sidebar = ({ children, title, menus }) => {
               return (
                 <li key={menu.id}>
                   <div
-                    onClick={() => handleClick(menu.route)}
+                    onClick={() => handleClick(menu.route[0])}
                     className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white ${
-                      menu.route === active
+                      menu.route.find((elm) => elm === active)
                         ? "active"
                         : "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
                     }`}

@@ -33,6 +33,7 @@ body {
 }
 
 .box {
+  width: 30%;
   border: 2px solid var(--gray);
   border-radius: 5px;
   padding: 10px;

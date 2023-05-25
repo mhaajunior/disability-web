@@ -7,6 +7,7 @@ import Header from "../components/Header";
 import Card from "../components/Card";
 import Table from "../components/Table";
 import Loading from "../components/Loading";
+import { isNull } from "../helpers/common";
 
 const ImportDataPage = () => {
   const [file, setFile] = useState();
@@ -71,17 +72,9 @@ const ImportDataPage = () => {
         const formData = new FormData();
         formData.append("fileData", file);
         importDisables(formData);
+        setFile("");
       }
     });
-  };
-
-  const isNull = (data) => {
-    const content = JSON.parse(data);
-    if (content && content !== " ") {
-      return content;
-    } else {
-      return "-";
-    }
   };
 
   let content = "ยังไม่ได้เลือกไฟล์ กรุณากดเลือกไฟล์เพื่อแสดง preview";
@@ -102,9 +95,9 @@ const ImportDataPage = () => {
         <Table
           titles={titleArr}
           contents={contentArr}
-          totalRows={rows}
+          totalRows={rows - 1}
           head="Preview"
-          checkFn={(content) => isNull(content)}
+          checkFn={(content) => isNull(content, true)}
         />
       );
     }
@@ -118,14 +111,12 @@ const ImportDataPage = () => {
         <div className="md:flex justify-evenly">
           <div
             className={`box ${active === 1 ? "box-active" : ""}`}
-            style={{ width: "30%" }}
             onClick={() => setActive(1)}
           >
             นำเข้าจากไฟล์
           </div>
           <div
             className={`box ${active === 2 ? "box-active" : ""}`}
-            style={{ width: "30%" }}
             onClick={() => setActive(2)}
           >
             นำเข้าจากฐานข้อมูลอื่น
@@ -139,8 +130,22 @@ const ImportDataPage = () => {
               onSubmit={handleUploadClick}
               encType="multipart/form-data"
             >
-              <input type="file" onChange={handleFileChange} />
-              <Button primary className="mb-3">
+              <input
+                type="file"
+                className="hidden"
+                id="files"
+                onChange={handleFileChange}
+              />
+              <div className="flex items-center">
+                <label htmlFor="files">
+                  <div className="box !w-32">เลือกไฟล์</div>
+                </label>
+                <span className="ml-3">
+                  {file ? file.name : "ยังไม่มีไฟล์ที่เลือก"}
+                </span>
+              </div>
+
+              <Button primary className="mb-3 mx-auto md:mx-0">
                 <IoIosAddCircle className="mr-2" />
                 นำเข้าข้อมูล
               </Button>

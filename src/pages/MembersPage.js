@@ -1,153 +1,122 @@
-import { IoIosAddCircle } from "react-icons/io";
-import {
-  AiOutlineLoading3Quarters,
-  AiOutlineWarning,
-  AiOutlineCheckCircle,
-  AiOutlineCloseCircle,
-} from "react-icons/ai";
+import { useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
-import { useNavigate, useParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Header from "../components/Header";
-import { useDeleteHouseholdMutation, useFetchHouseholdsQuery } from "../store";
-import { useEffect } from "react";
-import $ from "jquery";
+import { useFetchMembersQuery } from "../store";
+import Loading from "../components/Loading";
+import useMemberParams from "../hooks/use-member-params";
+import Dropdown from "../components/inputGroup/Dropdown";
 
 const MembersPage = () => {
-  const { data, error, isFetching } = useFetchHouseholdsQuery();
-  const [deleteHousehold, results] = useDeleteHouseholdMutation();
+  const [searchParams] = useSearchParams();
+  const [mode, setMode] = useState(1);
+  const fileId = searchParams.get("fi");
+  const fileName = searchParams.get("fn");
+  const iden = searchParams.get("iden");
+  const { data, error, isFetching, isSuccess } = useFetchMembersQuery({
+    file_id: fileId,
+    iden,
+  });
   const navigate = useNavigate();
-  const { household_id } = useParams();
-
-  useEffect(() => {
-    $("html,body").scrollTop(0);
-  }, []);
-
-  const navigateAdd = () => {
-    navigate(`/addMember/${household_id}`);
-  };
+  const { f4 } = useMemberParams();
 
   const navigateBack = () => {
-    navigate("/");
+    navigate(`/consistency?fi=${fileId}&fn=${fileName}`);
   };
 
   const handleEdit = (id) => {
-    navigate(`/editMember/${id}`);
-  };
-
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "คำเตือน!",
-      text: `คุณต้องการที่จะลบครัวเรือนที่ #${id} หรือไม่`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "ต้องการลบ",
-      cancelButtonText: "ไม่ต้องการลบ",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteHousehold(id);
-      }
-    });
+    navigate(`/consistency/members/${id}`);
   };
 
   let content;
-  if (isFetching || results.isLoading) {
-    content = (
-      <AiOutlineLoading3Quarters className="animate-spin text-7xl m-auto txt-primary" />
-    );
+  if (isFetching) {
+    content = <Loading type="partial" />;
   } else if (error) {
     content = <div className="text-red-600">เกิดข้อผิดพลาดในการแสดงข้อมูล</div>;
-  } else if (data.households.length === 0) {
+  } else if (data.data.members.length === 0) {
     content = <div>ไม่มีสมาชิกที่จะแสดง</div>;
   } else {
-    content = data.households.map((household) => {
-      let { status } = household;
-      let success,
-        warning,
-        error = false;
-      let status_text, class_name, pic;
+    content = data.data.members.map((member) => {
+      let err = false;
+      let relation = "";
+      let status = (
+        <span className="text-green-500 font-bold">ไม่พบความผิดพลาด</span>
+      );
+      if (data.data.errArr.find((err) => err === member._id)) {
+        err = true;
+        status = <span className="text-red-500 font-bold">พบความผิดพลาด</span>;
+      }
+      Object.values(f4).forEach((val) => {
+        if (val.id === member.fields.step1.f4) {
+          relation = val.name;
+        }
+      });
 
-      if (status === "success") {
-        success = true;
-        status_text =
-          "ข้อมูลของสมาชิกในครัวเรือนที่ท่านกรอกได้ผ่านขั้นตอนตรวจสอบความถูกต้องของข้อมูลเรียบร้อยแล้ว";
-        class_name = "text-green-600";
-        pic = (
-          <AiOutlineCheckCircle className="absolute right-4 top-3 text-green-600 text-8xl opacity-70" />
-        );
-      } else if (status === "warning") {
-        warning = true;
-        status_text =
-          "ข้อมูลของสมาชิกในครัวเรือนยังไม่เสร็จสมบูรณ์ กรุณากดที่กล่องเพื่อดำเนินการเพิ่มข้อมูลของสมาชิกในครัวเรือนและส่งข้อมูลมาให้ระบบทำการตรวจสอบความถูกต้องของข้อมูล";
-        class_name = "text-yellow-600";
-        pic = (
-          <AiOutlineWarning className="absolute right-4 top-3 text-yellow-600 text-8xl opacity-70" />
+      if (mode === 1 || (mode === 2 && err)) {
+        return (
+          <Card
+            key={member._id}
+            id={member._id}
+            error={err}
+            hoverable
+            onEdit={() => handleEdit(member._id)}
+          >
+            <div className="text-left">
+              <div>สมาชิกลำดับที่: {member.fields.step1.f1}</div>
+              <div>ความเกี่ยวพันกับหัวหน้าครัวเรือน: {relation}</div>
+              <div>สถานะ: {status}</div>
+            </div>
+          </Card>
         );
       } else {
-        error = true;
-        status_text =
-          "เกิดข้อผิดพลาดในขั้นตอนตรวจสอบความถูกต้องของข้อมูล กรุณากดที่กล่องเพื่อตรวจสอบข้อมูลของสมาชิกในครัวเรือนทีท่านกรอกอีกครั้งว่าถูกต้องและสอดคล้องตามข้อกำหนดหรือไม่";
-        class_name = "text-red-600";
-        pic = (
-          <AiOutlineCloseCircle className="absolute right-4 top-3 text-red-600 text-8xl opacity-70" />
-        );
+        return null;
       }
-
-      return (
-        <Card
-          key={household.id}
-          id={household.id}
-          success={success}
-          warning={warning}
-          error={error}
-          hoverable
-          hoverWord="กดเพื่อดูสมาชิกในครัวเรือน"
-          onDelete={handleDelete}
-          onEdit={handleEdit}
-          onClick={() => navigate(`/members/${household.id}`)}
-          className="relative"
-        >
-          {pic}
-          <div className="flex flex-col leading-10">
-            {" "}
-            <p>
-              <span className="font-bold">รหัสครัวเรือน:</span> #{household.id}
-            </p>
-            <p>
-              <span className="font-bold">จำนวนสมาชิกในครัวเรือน:</span> -
-            </p>
-            <p>
-              <span className="font-bold">หัวหน้าครัวเรือน:</span> -
-            </p>
-            <p>
-              <span className="font-bold">สถานะ:</span>{" "}
-              <span className={class_name}>{status_text}</span>
-            </p>
-          </div>
-        </Card>
-      );
     });
   }
+
+  const options = [
+    {
+      id: 1,
+      name: "แสดงครัวเรือนทั้งหมด",
+      value: 1,
+    },
+    {
+      id: 2,
+      name: "แสดงครัวเรือนที่มีความผิดพลาด",
+      value: 2,
+    },
+  ];
 
   return (
     <>
       <Header title="รายละเอียดสมาชิกภายในครัวเรือน">
         <div className="flex flex-row">
-          <Button primary onClick={navigateAdd}>
-            <IoIosAddCircle className="mr-2" />
-            เพิ่มสมาชิก
-          </Button>
           <Button secondary onClick={navigateBack}>
             <IoChevronBack className="mr-1" />
             กลับ
           </Button>
         </div>
       </Header>
-      <Card className="mt-5 flex-col">{}</Card>
+      <Card className="mt-5 flex-col">
+        {isSuccess && (
+          <div className="flex justify-end mb-5">
+            <Dropdown
+              options={options}
+              value={mode}
+              setterFn={(value) => setMode(value)}
+            />
+          </div>
+        )}
+        <div>รหัสครัวเรือน: {iden}</div>
+        <div>จำนวนสมาชิก: {data ? data.data.members.length : "loading..."}</div>
+        <div>
+          จำนวนสมาชิกที่พบความผิดพลาด:{" "}
+          {data ? data.data.errArr.length : "loading..."}
+        </div>
+        <div className="mt-5 text-center">{content}</div>
+      </Card>
     </>
   );
 };

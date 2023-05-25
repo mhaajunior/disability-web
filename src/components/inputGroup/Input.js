@@ -1,20 +1,17 @@
-import { useDispatch } from "react-redux";
 import "../../styles/Input.css";
 
-const Input = ({ label, name, value, dispatchFn }) => {
-  const dispatch = useDispatch();
-
+const Input = ({ label, name, value, setterFn }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    dispatch(dispatchFn(name, value));
+    setterFn(name, value);
   };
 
   return (
     <input
       name={name}
       type="text"
-      className="input sm:w-72 w-48"
-      placeholder={`-- ${label} --`}
+      className="input w-24"
+      placeholder={`${label}`}
       value={value}
       onChange={handleChange}
       autoComplete="off"
