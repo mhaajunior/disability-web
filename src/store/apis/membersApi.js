@@ -31,7 +31,7 @@ const membersApi = createApi({
         },
       }),
       fetchMemberById: builder.query({
-        invalidatesTags: (result, error, id) => {
+        providesTags: (result, error, id) => {
           return [{ type: "Member", id }];
         },
         query: (id) => {
@@ -42,8 +42,8 @@ const membersApi = createApi({
         },
       }),
       editMember: builder.mutation({
-        invalidatesTags: (result, error, id) => {
-          return [{ type: "Member", id }];
+        invalidatesTags: (result, error, data) => {
+          return [{ type: "Member", id: data.id }];
         },
         query: (data) => {
           const { id, memberForm } = data;

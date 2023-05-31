@@ -23,7 +23,7 @@ const Table = ({
             <tr>
               {titles.map((title) => {
                 return (
-                  <th key={title} scope="col" className="px-6 py-3">
+                  <th key={title} scope="col" className="px-5 py-3">
                     {title}
                   </th>
                 );
@@ -39,7 +39,7 @@ const Table = ({
                 >
                   {row.map((content, index) => {
                     return (
-                      <td key={index} className="px-6 py-3">
+                      <td key={index} className="px-5 py-3">
                         {checkFn ? checkFn(content) : content}
                       </td>
                     );

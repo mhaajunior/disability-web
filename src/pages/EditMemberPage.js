@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
@@ -24,12 +24,24 @@ const EditMemberPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, error, isFetching } = useFetchMemberByIdQuery(id);
-  const [editMember, { isLoading }] = useEditMemberMutation();
+  const [editMember, { isLoading, isSuccess }] = useEditMemberMutation();
   const dispatch = useDispatch();
   const possibleLength = usePossibleLength();
   const memberForm = useSelector((state) => {
     return state.memberForm.data;
   });
+
+  const navigateBack = useCallback(() => {
+    if (data) {
+      navigate(
+        `/consistency/members?fi=${data.data.file_id}&fn=${data.data.files.name}&iden=${data.data.iden}`
+      );
+    }
+  }, [data, navigate]);
+
+  useEffect(() => {
+    $("html, body").animate({ scrollTop: 0 }, "fast");
+  }, []);
 
   useEffect(() => {
     if (data) {
@@ -52,6 +64,12 @@ const EditMemberPage = () => {
       setFields(fieldsArr);
     }
   }, [data, dispatch]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigateBack();
+    }
+  }, [isSuccess, navigateBack]);
 
   const titles = [
     { key: "step1", name: "ตอนที่ 1 ลักษณะทั่วไปของสมาชิกในครัวเรือน" },
@@ -85,14 +103,6 @@ const EditMemberPage = () => {
     { key: "step11", name: "ตอนที่ 11 ลักษณะของครัวเรือน" },
     { key: "misc", name: "อื่นๆ" },
   ];
-
-  const navigateBack = () => {
-    if (data) {
-      navigate(
-        `/consistency/members?fi=${data.data.file_id}&fn=${data.data.files.name}&iden=${data.data.iden}`
-      );
-    }
-  };
 
   const saveMemberForm = () => {
     if (checkValidation()) {
@@ -155,7 +165,7 @@ const EditMemberPage = () => {
   } else {
     content = (
       <div>
-        <Card warning className="border !block mb-8">
+        <Card warning block className="border mb-8">
           <p className="m-2">
             <RiErrorWarningLine className="inline-block mr-3" />
             การกรอกข้อมูลในแต่ละ field ไม่ต้องกรอกเลข 0 นำหน้า
@@ -171,7 +181,7 @@ const EditMemberPage = () => {
           </p>
         </Card>
         {miscErr && (
-          <Card error className="border !block mb-10">
+          <Card error block className="border mb-10">
             {miscErr.map((elm, idx) => {
               return (
                 <p key={idx} className="m-2">
@@ -195,7 +205,7 @@ const EditMemberPage = () => {
             />
           );
         })}
-        <Button secondary className="mx-auto" onClick={saveMemberForm}>
+        <Button primary className="mx-auto" onClick={saveMemberForm}>
           บันทึก
         </Button>
       </div>
@@ -204,13 +214,16 @@ const EditMemberPage = () => {
 
   return (
     <>
+      {isLoading && <Loading type="full" />}
       <Header title="แก้ไขสมาชิกในครัวเรือน">
         <Button secondary onClick={navigateBack}>
           <IoChevronBack className="mr-1" />
           กลับ
         </Button>
       </Header>
-      <Card className="mt-5 !block">{content}</Card>
+      <Card block className="mt-5">
+        {content}
+      </Card>
     </>
   );
 };

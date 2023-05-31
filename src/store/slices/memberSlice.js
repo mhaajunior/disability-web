@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { disablesApi } from "../apis/disablesApi";
+import { membersApi } from "../apis/membersApi";
 import toastr from "../../helpers/toastr.config";
 import Swal from "sweetalert2";
 
@@ -47,6 +48,12 @@ const memberSlice = createSlice({
         Swal.fire("เกิดข้อผิดพลาด", "กรุณาลองใหม่อีกครั้งในภายหลัง", "error");
       }
     );
+    builder.addMatcher(membersApi.endpoints.editMember.matchFulfilled, () => {
+      toastr["success"]("ทำการแก้ไขและตรวจสอบข้อมูลสำเร็จ");
+    });
+    builder.addMatcher(membersApi.endpoints.editMember.matchRejected, () => {
+      Swal.fire("เกิดข้อผิดพลาด", "กรุณาลองใหม่อีกครั้งในภายหลัง", "error");
+    });
   },
 });
 

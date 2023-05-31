@@ -62,7 +62,7 @@ const Inconsist = ({ file: { id, name }, load }) => {
           row._id,
           row.totalMemErrors,
           row.overallErrors,
-          0,
+          row.editDatetime,
           <Button
             warning
             onClick={() =>

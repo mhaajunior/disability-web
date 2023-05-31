@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import { useState } from "react";
 import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import "../styles/Card.css";
 
@@ -12,14 +11,12 @@ const Card = ({
   success,
   warning,
   error,
-  hoverWord,
   onEdit,
   onDelete,
-  path,
+  block,
   ...rest
 }) => {
   const [isHover, setIsHover] = useState(false);
-  const navigate = useNavigate();
   const classes = classNames(
     rest.className,
     "card br-10 flex justify-between relative",
@@ -29,6 +26,7 @@ const Card = ({
       yellow: warning,
       "cursor-pointer": hoverable,
       "border-bold": hoverable && isHover,
+      block: block,
     }
   );
 
@@ -42,28 +40,20 @@ const Card = ({
     >
       {children}
       {isHover && (
-        <>
-          <div
-            onClick={() => navigate(path)}
-            className="absolute inset-0 w-full h-full bg-gray-300 opacity-80 br-10 flex justify-center items-center"
-          >
-            {hoverWord}
+        <div className="flex items-center z-20">
+          <div>
+            {onEdit && (
+              <Button warning rounded onClick={() => onEdit(id)}>
+                <RiEditLine />
+              </Button>
+            )}
+            {onDelete && (
+              <Button danger rounded onClick={() => onDelete(id)}>
+                <RiDeleteBin6Line />
+              </Button>
+            )}
           </div>
-          <div className="flex items-center z-20">
-            <div>
-              {onEdit && (
-                <Button warning rounded onClick={() => onEdit(id)}>
-                  <RiEditLine />
-                </Button>
-              )}
-              {onDelete && (
-                <Button danger rounded onClick={() => onDelete(id)}>
-                  <RiDeleteBin6Line />
-                </Button>
-              )}
-            </div>
-          </div>
-        </>
+        </div>
       )}
     </div>
   );

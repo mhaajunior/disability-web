@@ -33,3 +33,7 @@
 .card.yellow {
   border-color: yellow;
 }
+
+.block {
+  display: block !important;
+}
