@@ -15,8 +15,8 @@ import FieldGroup from "../components/FieldGroup";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import $ from "jquery";
-import usePossibleLength from "../hooks/use-possible-length";
 import { padZero } from "../helpers/common";
+import useRangeCheck from "../hooks/use-range-check";
 
 const EditMemberPage = () => {
   const [fields, setFields] = useState([]);
@@ -26,7 +26,7 @@ const EditMemberPage = () => {
   const { data, error, isFetching } = useFetchMemberByIdQuery(id);
   const [editMember, { isLoading, isSuccess }] = useEditMemberMutation();
   const dispatch = useDispatch();
-  const possibleLength = usePossibleLength();
+  const possibleLength = useRangeCheck();
   const memberForm = useSelector((state) => {
     return state.memberForm.data;
   });
@@ -34,7 +34,7 @@ const EditMemberPage = () => {
   const navigateBack = useCallback(() => {
     if (data) {
       navigate(
-        `/consistency/members?fi=${data.data.file_id}&fn=${data.data.files.name}&iden=${data.data.iden}`
+        `/consistency/members?fi=${data.data.file_id}&fn=${data.data.filename}&iden=${data.data.iden}`
       );
     }
   }, [data, navigate]);

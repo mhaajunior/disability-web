@@ -127,8 +127,8 @@ const ImportDataPage = () => {
           <>
             <form
               className="lg:w-4/6 mx-auto my-5 lg:flex flex-row items-center justify-between"
-              onSubmit={handleUploadClick}
               encType="multipart/form-data"
+              onSubmit={handleUploadClick}
             >
               <input
                 type="file"

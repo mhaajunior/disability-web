@@ -19,7 +19,7 @@ const InputGroup = ({
 
   return (
     <div id={`${type}_group_${name}`} className={classes}>
-      <label className="pr-7 font-bold w-24 label">{name.toUpperCase()}</label>
+      <div className="pr-7 font-bold w-24 label">{name.toUpperCase()}</div>
       {type === "dropdown" && (
         <Dropdown
           label={label}

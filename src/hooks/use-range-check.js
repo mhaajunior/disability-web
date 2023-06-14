@@ -1,4 +1,4 @@
-const usePossibleLength = () => {
+const useRangeCheck = () => {
   return {
     f1: 2,
     f2: 1,
@@ -177,4 +177,4 @@ const usePossibleLength = () => {
   };
 };
 
-export default usePossibleLength;
+export default useRangeCheck;
