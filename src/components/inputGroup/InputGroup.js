@@ -3,7 +3,7 @@ import Input from "../inputGroup/Input";
 import classNames from "classnames";
 
 const InputGroup = ({
-  type,
+  group,
   label,
   options,
   name,
@@ -11,6 +11,7 @@ const InputGroup = ({
   setterFn,
   isValid,
   isShow,
+  ...rest
 }) => {
   const classes = classNames("flex justify-between py-5 px-8 items-center", {
     error: !isValid,
@@ -18,19 +19,27 @@ const InputGroup = ({
   });
 
   return (
-    <div id={`${type}_group_${name}`} className={classes}>
+    <div id={`${group}_group_${name}`} className={classes}>
       <div className="pr-7 font-bold w-24 label">{name.toUpperCase()}</div>
-      {type === "dropdown" && (
+      {group === "dropdown" && (
         <Dropdown
           label={label}
           options={options}
           name={name}
           value={value}
           setterFn={setterFn}
+          className={rest.className}
         />
       )}
-      {type === "input" && (
-        <Input label={label} name={name} value={value} setterFn={setterFn} />
+      {group === "input" && (
+        <Input
+          label={label}
+          type={rest.type}
+          name={name}
+          value={value}
+          setterFn={setterFn}
+          className={rest.className}
+        />
       )}
     </div>
   );

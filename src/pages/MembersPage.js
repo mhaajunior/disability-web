@@ -104,6 +104,7 @@ const MembersPage = () => {
           <div className="flex justify-end mb-5">
             <Dropdown
               options={options}
+              className="sm:w-72 w-48"
               value={mode}
               setterFn={(value) => setMode(value)}
             />

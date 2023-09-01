@@ -26,7 +26,6 @@ const memberSlice = createSlice({
     builder.addMatcher(
       disablesApi.endpoints.importDisable.matchFulfilled,
       () => {
-        toastr.options.onclick = () => (window.location.href = "/consistency");
         toastr["success"]("ทำการนำเข้าข้อมูลสำเร็จ");
       }
     );

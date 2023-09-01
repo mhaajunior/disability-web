@@ -3,7 +3,7 @@ import { GoChevronDown } from "react-icons/go";
 import $ from "jquery";
 import "../../styles/Dropdown.css";
 
-const Dropdown = ({ label, options, name, value, setterFn }) => {
+const Dropdown = ({ label, options, name, value, setterFn, ...rest }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const divEl = useRef();
@@ -100,7 +100,7 @@ const Dropdown = ({ label, options, name, value, setterFn }) => {
   return (
     <div
       name={name}
-      className="dropdown sm:w-72 w-48 relative cursor-pointer"
+      className={`dropdown relative cursor-pointer ${rest.className}`}
       value={value}
       ref={divEl}
       onClick={() => setIsOpen(!isOpen)}

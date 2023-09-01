@@ -14,21 +14,36 @@ const ImportDataPage = () => {
   const [preview, setPreview] = useState("");
   const [rows, setRows] = useState(0);
   const [active, setActive] = useState(1);
+  const [load, setLoad] = useState(false);
   const [importDisables, { isLoading }] = useImportDisableMutation();
 
   const handleFileChange = (e) => {
+    setLoad(true);
     const { files } = e.target;
     if (files) {
       if (files.length === 0) return;
 
       setFile(files[0]);
 
-      if (files[0].type !== "text/csv") return;
+      if (files[0].type !== "text/csv") {
+        setLoad(false);
+        setFile();
+        Swal.fire("ผิดพลาด", "ไฟล์ที่นำเข้ามีนามสกุลไฟล์ผิด", "error");
+        return;
+      }
 
       let reader = new FileReader();
       reader.onload = (e) => {
         const file = e.target.result;
         const lines = file.split(/\r\n|\n/);
+
+        if (lines[0].split(",").length !== 201) {
+          setLoad(false);
+          setFile();
+          Swal.fire("ผิดพลาด", "ไฟล์ที่นำเข้ามีรูปแบบไม่ถูกต้อง", "error");
+          return;
+        }
+
         let slicedlines;
         if (lines.length < 11) {
           slicedlines = lines.slice(0, lines.length);
@@ -39,6 +54,7 @@ const ImportDataPage = () => {
 
         setRows(lines.length);
         setPreview(slicedlines);
+        setLoad(false);
       };
 
       reader.onerror = (e) => alert(e.target.error.name);
@@ -79,18 +95,18 @@ const ImportDataPage = () => {
 
   let content = "ยังไม่ได้เลือกไฟล์ กรุณากดเลือกไฟล์เพื่อแสดง preview";
   if (file) {
-    if (file.type !== "text/csv") {
-      content = "ไม่สามารถแสดง preview ได้เนื่องจากนามสกุลไฟล์ผิด";
-    } else {
-      let titleArr = [];
-      let contentArr = [];
-      for (let i = 0; i < preview.length; i++) {
-        if (i === 0) {
-          titleArr = preview[i].split(",");
-        } else {
-          contentArr.push(preview[i].split(","));
-        }
+    let titleArr = [];
+    let contentArr = [];
+    for (let i = 0; i < preview.length; i++) {
+      if (i === 0) {
+        titleArr = preview[i].split(",");
+      } else {
+        contentArr.push(preview[i].split(","));
       }
+    }
+    if (load) {
+      content = <Loading type="partial" />;
+    } else {
       content = (
         <Table
           titles={titleArr}
@@ -145,7 +161,12 @@ const ImportDataPage = () => {
                 </span>
               </div>
 
-              <Button primary className="mb-3 mx-auto md:mx-0">
+              <Button
+                loading={load}
+                disabled={load}
+                primary
+                className="mb-3 mx-auto md:mx-0"
+              >
                 <IoIosAddCircle className="mr-2" />
                 นำเข้าข้อมูล
               </Button>

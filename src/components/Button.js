@@ -21,13 +21,14 @@ const Button = ({
       "btn-danger": danger,
       "btn-warning": warning,
       "rounded-3xl": rounded,
+      "opacity-50": loading,
     }
   );
 
   return (
     <button {...rest} className={classes}>
       {loading ? (
-        <AiOutlineLoading3Quarters className="animate-spin txt-primary" />
+        <AiOutlineLoading3Quarters className="animate-spin text-white mx-auto" />
       ) : (
         children
       )}

@@ -4,6 +4,10 @@ const membersApi = createApi({
   reducerPath: "members",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_BACK_END_URL,
+    prepareHeaders(headers) {
+      return headers;
+    },
+    credentials: "include",
   }),
   endpoints(builder) {
     return {

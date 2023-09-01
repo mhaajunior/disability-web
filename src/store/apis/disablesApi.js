@@ -4,12 +4,16 @@ const disablesApi = createApi({
   reducerPath: "disables",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_BACK_END_URL,
+    prepareHeaders(headers) {
+      return headers;
+    },
+    credentials: "include",
   }),
   endpoints(builder) {
     return {
       importDisable: builder.mutation({
-        invalidatesTags: () => {
-          return [{ type: "UsersDisables" }];
+        invalidatesTags: (result) => {
+          return [{ type: "UsersDisables", user_id: result.user_id }];
         },
         query: (formData) => {
           return {
@@ -22,10 +26,10 @@ const disablesApi = createApi({
       fetchDisables: builder.query({
         providesTags: (result) => {
           if (result) {
-            const tags = result.data.map((file) => {
-              return { type: "Disable", id: file._id };
+            const tags = result.data.files.map((file) => {
+              return { type: "Disable", file_id: file._id };
             });
-            tags.push({ type: "UsersDisables" });
+            tags.push({ type: "UsersDisables", user_id: result.data.user_id });
             return tags;
           }
           return [];
@@ -39,7 +43,7 @@ const disablesApi = createApi({
       }),
       deleteDisable: builder.mutation({
         invalidatesTags: (result, error, id) => {
-          return [{ type: "Disable", id }];
+          return [{ type: "Disable", file_id: id }];
         },
         query: (id) => {
           return {

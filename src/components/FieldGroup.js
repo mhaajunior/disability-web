@@ -43,7 +43,8 @@ const FieldGroup = ({ title, step, fields, errors }) => {
               <InputGroup
                 key={idx}
                 label={field}
-                type="input"
+                group="input"
+                className="w-24"
                 name={field}
                 value={getFormValue(field)}
                 isValid={validateInput(field)}

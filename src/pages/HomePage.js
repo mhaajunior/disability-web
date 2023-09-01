@@ -1,7 +1,7 @@
 import { useLocation, useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import ImportDataPage from "./ImportDataPage";
-import { FaFileUpload, FaClipboardCheck, FaSignOutAlt } from "react-icons/fa";
+import { FaFileUpload, FaClipboardCheck } from "react-icons/fa";
 import ConsistencyPage from "./ConsistencyPage";
 import MembersPage from "./MembersPage";
 import EditMemberPage from "./EditMemberPage";
@@ -27,12 +27,6 @@ const Homepage = () => {
         `/consistency/members/${id}`,
       ],
     },
-    {
-      id: 3,
-      title: "Sign Out",
-      icon: <FaSignOutAlt />,
-      route: ["/signout"],
-    },
   ];
 
   const renderedComponent = () => {
@@ -51,11 +45,11 @@ const Homepage = () => {
   };
 
   return (
-    <>
+    <div className="text-gray-500 m-5 lg:w-9/12 sm:w-5/6 w-11/12 h-full mx-auto ">
       <Sidebar title="โครงการสำรวจความพิการ" menus={menus}>
         {renderedComponent()}
       </Sidebar>
-    </>
+    </div>
   );
 };
 

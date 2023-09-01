@@ -29,6 +29,7 @@ const ConsistencyPage = () => {
         `${process.env.REACT_APP_BACK_END_URL}/consistencies/validate`,
         {
           params: { id },
+          withCredentials: true,
         }
       );
       setLoading(false);
@@ -60,14 +61,14 @@ const ConsistencyPage = () => {
     content = <Loading type="partial" />;
   } else if (error) {
     content = <div className="text-red-600">เกิดข้อผิดพลาดในการแสดงข้อมูล</div>;
-  } else if (data.data.length === 0) {
+  } else if (data.data.files.length === 0) {
     content = <div>ไม่มีรายการไฟล์ที่จะแสดง</div>;
   } else {
-    content = data.data.map((file) => {
+    content = data.data.files.map((file) => {
       return (
         <div
           key={file._id}
-          className={`box !w-36 ellipsis mb-2 relative ${
+          className={`box md:w-36 ellipsis mb-2 relative ${
             file._id === selectedFile.id ? "box-active" : ""
           }`}
           onClick={() => setSelectedFile({ id: file._id, name: file.name })}
@@ -84,7 +85,7 @@ const ConsistencyPage = () => {
       <Header title="Consistency Check"></Header>
       <Card className="mt-5 flex-col">
         {selectedFile.id && (
-          <div className="md:flex justify-between items-center">
+          <div className="flex justify-between items-center">
             <p>ไฟล์ที่เลือก: {selectedFile.name}</p>
             <div className="flex">
               <Button

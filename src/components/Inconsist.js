@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import $ from "jquery";
 import Loading from "./Loading";
 import Table from "./Table";
 import { isNull } from "../helpers/common";
 import Button from "./Button";
-import { useNavigate } from "react-router-dom";
-import $ from "jquery";
 
 const Inconsist = ({ file: { id, name }, load }) => {
   const [inconsist, setInconsist] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [pageNo, setPageNo] = useState(1);
   const navigate = useNavigate();
+  const perPage = 10;
 
   useEffect(() => {
     try {
@@ -20,7 +22,8 @@ const Inconsist = ({ file: { id, name }, load }) => {
         const { data } = await axios.get(
           `${process.env.REACT_APP_BACK_END_URL}/consistencies`,
           {
-            params: { id },
+            params: { id, pageNo, perPage },
+            withCredentials: true,
           }
         );
         setInconsist(data);
@@ -31,13 +34,13 @@ const Inconsist = ({ file: { id, name }, load }) => {
     } catch (err) {
       Swal.fire("เกิดข้อผิดพลาด", "กรุณาลองใหม่อีกครั้งในภายหลัง", "error");
     }
-  }, [id, load]);
+  }, [id, load, pageNo]);
 
   let content;
   if (!inconsist || loading) {
     content = <Loading type="partial" />;
     $("#consistency").hide();
-  } else if (inconsist.data.length === 0) {
+  } else if (inconsist.data.result.length === 0) {
     content = <div>ไม่มีรายการไฟล์ที่จะแสดง</div>;
     $("#consistency").hide();
   } else {
@@ -57,7 +60,7 @@ const Inconsist = ({ file: { id, name }, load }) => {
     } else {
       const titleArr = ["iden", "mem err", "total err", "last edit", "edit"];
       const contentArr = [];
-      for (const row of inconsist.data) {
+      for (const row of inconsist.data.result) {
         contentArr.push([
           row._id,
           row.totalMemErrors,
@@ -79,9 +82,13 @@ const Inconsist = ({ file: { id, name }, load }) => {
         <Table
           titles={titleArr}
           contents={contentArr}
-          totalRows={inconsist.data.length}
+          pageNo={pageNo}
+          perPage={perPage}
+          totalRows={inconsist.data.count}
           head="ครัวเรือนที่ตรวจพบความผิดพลาด"
           checkFn={(content) => isNull(content, false)}
+          pagination
+          onChangePage={(page) => setPageNo(page)}
         />
       );
       $("#consistency").hide();
